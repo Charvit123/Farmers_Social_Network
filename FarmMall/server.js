@@ -6,9 +6,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/api', require('./routes/authRouter'));
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use('/api', require('./routes/dissRouter'));
 const URL = process.env.MONGODB_URL;
 mongoose.connect(URL, {
 }, err => {

@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import {StyleSheet,Text,View,TextInput ,TouchableOpacity} from 'react-native';
 import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const state = {
         email: "",
         password: "",
@@ -16,15 +17,15 @@ const LoginScreen = ({navigation}) => {
   const onSubmit = async (e) => {
         e.preventDefault();
         if(isEmpty(email) || isEmpty(password))
-                return setUserData({...userData, err: "Please fill in all fields.", success: ''});
+                return setUser({...userData, err: "Please fill in all fields.", success: ''});
 
         if(!isEmail(email))
-            return setUserData({...userData, err: "Invalid emails.", success: ''});
+            return setUser({...userData, err: "Invalid emails.", success: ''});
 
         if(isLength(password))
-            return setUserData({...userData, err: "Password must be at least 6 characters.", success: ''});
+            return setUser({...userData, err: "Password must be at least 6 characters.", success: ''});
         try {
-          fetch('http://192.168.0.100:5000/api/login', {
+          fetch('http://192.168.0.104:5000/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,8 +34,9 @@ const LoginScreen = ({navigation}) => {
             })
             .then(async res=>{
               const jsonRes = await res.json();
-              console.log(jsonRes);
+              // console.log(jsonRes["user"]._id);
               if(res.status!=500)
+                await AsyncStorage.setItem('id', jsonRes["user"]._id)
                 navigation.navigate("Home");
             })
             .catch((error) =>{

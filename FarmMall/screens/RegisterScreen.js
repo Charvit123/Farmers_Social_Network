@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { create } from 'apisauce';
 
 
 const state = {
@@ -20,7 +22,9 @@ const state = {
 };
     
 const RegisterScreen = ({navigation})=>{
-  
+    const api=create({
+      baseURL:'http://192.168.0.104:5000/'
+    })
   const [userData,setUser]=useState(state);
   const { username, email, password ,cpassword,err,success} = userData;
   const onChangeHandler =(name,value)=> {
@@ -29,28 +33,23 @@ const RegisterScreen = ({navigation})=>{
   const onSubmit = async (e) => {
         e.preventDefault();
         if(isEmpty(username) || isEmpty(password))
-                return setUserData({...userData, err: "Please fill in all fields.", success: ''});
+                return setUser({...userData, err: "Please fill in all fields.", success: ''});
 
         if(!isEmail(email))
-            return setUserData({...userData, err: "Invalid emails.", success: ''});
+            return setUser({...userData, err: "Invalid emails.", success: ''});
 
         if(isLength(password))
-            return setUserData({...userData, err: "Password must be at least 6 characters.", success: ''});
+            return setUser({...userData, err: "Password must be at least 6 characters.", success: ''});
         
         if(!isMatch(password, cpassword))
-            return setUserData({...userData, err: "Password did not match.", success: ''});
+            return setUser({...userData, err: "Password did not match.", success: ''});
 
         try {
-            fetch('http://192.168.0.100:5000/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-            })
+          api.post('/api/register',{userData})
             .then(async res=>{
-               const jsonRes = await res.json();
+                const jsonRes = await res.json();
                 console.log(jsonRes);
+                await AsyncStorage.setItem('id', jsonRes["user"]._id)
                 navigation.navigate("Home");
             })
             .catch((error) =>{
