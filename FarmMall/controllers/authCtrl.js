@@ -123,6 +123,13 @@ const authCtrl = {
         } catch (err) {
             return res.status(500).json({msg: err.message});
         }
+    },
+    findUser: async (req, res) => {
+        const { id } = req.body;
+        const user = await Users.findOne({ _id: id })
+        res.json({
+            user
+        });
     }
 };
 
