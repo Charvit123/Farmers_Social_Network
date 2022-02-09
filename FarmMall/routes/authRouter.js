@@ -5,5 +5,4 @@ router.post('/register', authCtrl.register);
 router.post('/login', authCtrl.login);
 router.post('/logout', authCtrl.logout);
 router.post('/findUser', authCtrl.findUser);
-
 module.exports = router;

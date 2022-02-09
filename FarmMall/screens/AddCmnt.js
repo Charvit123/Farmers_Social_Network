@@ -44,7 +44,7 @@ const ModalPoup=({visible,children})=>{
   );
 }
 
-const AddCmnt = ({visible,navigation}) => {
+const AddCmnt = ({visible}) => {
   const [userData,setUserData]=useState(state);
    const { cmnt } = userData;
   const onChangeHandler =(name,value)=> {
@@ -54,7 +54,7 @@ const AddCmnt = ({visible,navigation}) => {
     <ModalPoup visible={visible}>
         <View style={{alignItems: 'center'}}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.push("Details")}>
+            <TouchableOpacity onPress={() => setVisible(false)}>
               <Icon name="close" size={35}/>
             </TouchableOpacity>
           </View>

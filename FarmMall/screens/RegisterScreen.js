@@ -10,7 +10,7 @@ import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'apisauce';
-import hostname from '../const/hostname';
+import hostname from "../const/hostname";
 
 const state = {
         username: "",
@@ -23,8 +23,9 @@ const state = {
     
 const RegisterScreen = ({navigation})=>{
     const api=create({
-      baseURL:'http://192.168.0.104:5000/'
+      baseURL:'http://192.168.29.71:5000/'
     })
+
   const [userData,setUser]=useState(state);
   const { username, email, password ,cpassword,err,success} = userData;
   const onChangeHandler =(name,value)=> {
@@ -45,7 +46,7 @@ const RegisterScreen = ({navigation})=>{
             return setUser({...userData, err: "Password did not match.", success: ''});
 
         try {
-          const url='http://'+hostname+':5000/api/register';
+          const url = "http://" + hostname + ":5000/api/register";
           fetch(url, {
             method: 'POST',
             headers: {

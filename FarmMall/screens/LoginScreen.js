@@ -3,7 +3,7 @@ import {StyleSheet,Text,View,TextInput ,TouchableOpacity} from 'react-native';
 import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import hostname from '../const/hostname';
+import hostname from "../const/hostname";
 const state = {
         email: "",
         password: "",
@@ -26,7 +26,7 @@ const LoginScreen = ({navigation}) => {
         if(isLength(password))
             return setUser({...userData, err: "Password must be at least 6 characters.", success: ''});
         try {
-          const url='http://'+hostname+':5000/api/login';
+          const url = "http://" + hostname + ":5000/api/login";
           fetch(url, {
             method: 'POST',
             headers: {
@@ -132,7 +132,3 @@ const styles = StyleSheet.create({
   }
 });
 export default LoginScreen;
-
-
-
-
