@@ -3,6 +3,7 @@ import {StyleSheet,Text,View,TextInput ,TouchableOpacity} from 'react-native';
 import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import hostname from "../const/hostname";
 const state = {
         email: "",
         password: "",
@@ -25,7 +26,8 @@ const LoginScreen = ({navigation}) => {
         if(isLength(password))
             return setUser({...userData, err: "Password must be at least 6 characters.", success: ''});
         try {
-          fetch('http://192.168.0.104:5000/api/login', {
+          const url = "http://" + hostname + ":5000/api/login";
+          fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,7 +36,6 @@ const LoginScreen = ({navigation}) => {
             })
             .then(async res=>{
               const jsonRes = await res.json();
-              // console.log(jsonRes["user"]._id);
               if(res.status!=500)
                 await AsyncStorage.setItem('id', jsonRes["user"]._id)
                 navigation.navigate("Home");
@@ -44,7 +45,7 @@ const LoginScreen = ({navigation}) => {
             })
             // setUserData({...userData, err: '', success: res.data.msg});
         } catch (err) {
-            console.log(res);
+            console.log(err);
             // err.response.data.msg && setUserData({...userData, err: err.response.data.msg, success: ''});
         }
   }
@@ -131,7 +132,3 @@ const styles = StyleSheet.create({
   }
 });
 export default LoginScreen;
-
-
-
-
