@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import * as  ImagePicker from 'expo-image-picker';
 import { create } from 'apisauce';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import hostname from '../const/hostname';
 const state = {
   title:"",
   description:"",
@@ -10,7 +11,7 @@ const state = {
 };
 const AddQues = ({navigation}) => {
     const api=create({
-      baseURL:'http://192.168.0.104:5000/'
+      baseURL:'http://'+hostname+':5000/'
     })
     const [Info,setInfo]=useState(state);
     const { title,description,picture} = Info;
@@ -31,12 +32,12 @@ const AddQues = ({navigation}) => {
     const takeimage = async () => {
         const pick = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            base64: true
+            base64: true,
+            aspect: [4,3],
         });
         
         if(!pick.cancelled){
             setImg(pick);
-            // console.log(pick);
         }
     }
     const onSubmit=async()=>{
@@ -56,22 +57,10 @@ const AddQues = ({navigation}) => {
         },
       })
       const result=await res.json();
-      // console.log(result);
-      // const res2 = await fetch("http://192.168.0.104:5000/api/addDetails", {
-      //   body:JSON.stringify({title,description,picture: [result.url]}),
-      //   method: 'POST',
-      //   headers: {
-      //     'content-type': 'application/json'
-      //   },
-      // })
-
-      // const result2=await res2.text();
-      // console.log(result2);
       api.post('/api/addDetails',{title,description,picture:[result.url],id})
       .then(res=>{
-        // console.log(res);
         if(res.status!=500)
-                navigation.navigate("Home");
+            navigation.push("Home")        
       })
       .catch(err=>{
         console.log(err);

@@ -10,7 +10,7 @@ import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'apisauce';
-
+import hostname from '../const/hostname';
 
 const state = {
         username: "",
@@ -45,10 +45,17 @@ const RegisterScreen = ({navigation})=>{
             return setUser({...userData, err: "Password did not match.", success: ''});
 
         try {
-          api.post('/api/register',{userData})
+          const url='http://'+hostname+':5000/api/register';
+          fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+            })
             .then(async res=>{
-                const jsonRes = await res.json();
-                console.log(jsonRes);
+              const jsonRes = await res.json();
+              if(res.status!=500)
                 await AsyncStorage.setItem('id', jsonRes["user"]._id)
                 navigation.navigate("Home");
             })

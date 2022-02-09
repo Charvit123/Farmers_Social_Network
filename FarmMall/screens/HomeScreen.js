@@ -7,46 +7,40 @@ import {
   Dimensions,
   Image,
   SafeAreaView,
-  FlatList
+  ScrollView,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, { useEffect, useState } from 'react';
 import { create } from 'apisauce';
 import COLORS from './../const/colors';
-// import plants from './../const/plants';
+import hostname from '../const/hostname';
 
 const HomeScreen = ({navigation}) => {
-  // const [discussions,setDiscussions]=useState([]);
-  let discussions = {};
-  const api = create({
-    baseURL: 'http://192.168.0.104:5000/'
-  }) 
-
-  const fetchDiscussion = async () => {
-     api.get('/api/showDiscussions')
+  const [discussions,setDiscussions]=useState([]);
+  const [selectedLanguage, setSelectedLanguage] = useState();
+  useEffect(async() => {
+    const url='http://'+hostname+':5000/api/showDiscussions';
+    await fetch(url,{
+      method: 'GET',
+      headers: {
+                'Content-Type': 'application/json',
+      },
+    })
     .then(async(res) => {
-      // const result1=res.json();
-      discussions = res["data"].getDiscussions;
-      // console.log(discussions.length)
-      for (var i=0; i < discussions.length; i++){
-        console.log(discussions[i].title);
-      }
-      // setDiscussions({...result1});
+      const result1= await res.json();
+      setDiscussions({...result1.getDiscussions});
     }).catch((err) => {
       console.log(err);
     });
-    // console.log(discussions);
-  }
-
-  useEffect(async() => {
-    await fetchDiscussion();
   }, [])
   const addQues=async()=>{
     navigation.navigate("AddQues");
   }
   const onSubmit=async()=>{
     try {
-            fetch('http://192.168.0.104:5000/api/logout', {
+      const url='http://'+hostname+':5000/api/logout';
+            fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,7 +48,6 @@ const HomeScreen = ({navigation}) => {
             }) 
             .then(async res=>{
                const jsonRes = await res.json();
-                console.log(jsonRes);
                 navigation.navigate("Login");
             })
             .catch((error) =>{
@@ -67,7 +60,7 @@ const HomeScreen = ({navigation}) => {
     }
     const [catergoryIndex, setCategoryIndex] = React.useState(0);
 
-  const categories = ['POPULAR', 'ORGANIC', 'DESEASE', 'WEATHER'];
+  const categories = ['POPULAR', 'ORGANIC', 'DISEASE', 'WEATHER'];
 
     const CategoryList = () => {
       return (
@@ -89,33 +82,35 @@ const HomeScreen = ({navigation}) => {
       </View>
     );
   };
-    const Card = () => {
-      console.log("1");
-      // console.log(diss);
-      console.log("2");
-        return (
+    const Card = (diss) => {
+      return (
           <TouchableOpacity
             activeOpacity={0.8}
-        // onPress={() => navigation.navigate('Details', plant)}
+            onPress={() => navigation.navigate('Details',diss)}
           >
           <View style={style.card}>
-            {/* <View style={{alignItems: 'flex-end'}}>
-            {}
-          </View> */}
-
+            {/* <View style={{left:270,paddingBottom: 20}}>
+                <Picker> 
+                  <Picker.Item label="..." value="0" />
+                    <Picker.Item 
+                    label="Delete1" 
+                    value="delete" 
+                    />
+                </Picker>
+            </View> */}
             <View
               style={{
                 height: 200,
                 alignItems: 'center',
               }}>
               <Image
-                source={{uri:'http://res.cloudinary.com/dxepcudkt/image/upload/v1643356204/sbzfcsmctumhj2gxylly.jpg'}}
-                style={{resizeMode:'contain',width:400,height:200}}
+                source={{uri:diss.diss[1].images[0]}}
+                style={{resizeMode:'contain',width:'100%',height:200}}
               />
             </View>
             <View style={style.cardInfo}>
             <Text style={{fontWeight: 'bold', fontSize: 15}}>
-              Charvit
+              {diss.diss[1].title}
             </Text>
             <View
               style={{
@@ -124,7 +119,7 @@ const HomeScreen = ({navigation}) => {
                 marginTop: 5,
               }}>
               <Text style={{fontSize: 13, fontWeight: 'bold'}}>
-                Charvit
+                {diss.diss[1].description}
               </Text>
             </View>
           </View>
@@ -133,6 +128,7 @@ const HomeScreen = ({navigation}) => {
     );
   };
   return (
+    
     <SafeAreaView
       style={{flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white}}>
       <View style={style.header}>
@@ -156,32 +152,14 @@ const HomeScreen = ({navigation}) => {
         </View>
       </View>
       <CategoryList />
-      <Card/>
-      {/* {
-        Object.entries(discussions).map((item)=>{
-          console.log(item);
-          // return <Card diss={item} />
-        })
-      } */}
-       { 
-      //  <FlatList
-      //     showsVerticalScrollIndicator={false}
-      //     contentContainerStyle={{
-      //       marginTop: 10,
-      //       paddingBottom: 50,
-      //     }}
-      //     data={Object.keys(discussions)}
-      //     renderItem={(item) => {
-      //       console.log(item);
-      //     // return <Card diss={item} />;
-      //     }}
-      // /> 
-      // {
-      //   for(i=0;i<discussions.length;i++)
-      // }
-}
-      {/* } */}
-     </SafeAreaView>
+      <ScrollView>
+        {discussions &&
+          Object.entries(discussions).map((item,i)=>{
+            return <Card diss={item} key={i} />
+          })
+        }
+      </ScrollView>
+      </SafeAreaView>
   )
 };
 export default HomeScreen;
