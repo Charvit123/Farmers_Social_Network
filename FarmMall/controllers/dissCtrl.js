@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/userModel");
 const Comments = require("../models/cmntModel");
+const { request } = require("express");
 const dissCtrl = {
   addDetails: async (req, res) => {
     try {
@@ -70,16 +71,19 @@ const dissCtrl = {
 
   comment: async (req, res) => {
     try {
-      const comments = await Comment.find({ postId: req.params.id });
+      const comments = await Comments.find({ postId: req.body.postId });
       if (!comments)
         return res.status(400).json({ msg: "This News does not exist" });
 
       res.json({
         comments,
       });
+     // console.log(comments);
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+
+    // console.log(req.body);
   },
 };
 module.exports = dissCtrl;

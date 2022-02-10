@@ -71,15 +71,34 @@ const postPage = (disscussion) => {
   const [user, setUser] = useState({});
   useEffect(async () => {
     const url = "http://" + hostname + ":5000/api/finduser";
+    const url2 = "http://" + hostname + ":5000/api/comment";
     const res = await fetch(url, {
       method: "POST",
       body: JSON.stringify({ id }),
       headers: {
         "Content-Type": "application/json",
       },
+
+     
     });
+
     const jsonRes = await res.json();
     setUser(jsonRes.user);
+    
+
+    const res1 = await fetch(url2, {
+      method: "POST",
+      body: JSON.stringify( disscussion.route.params.diss[1]._id ),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+   
+    const jsonRes1 = await res1.json();
+    // setUser(jsonRes1.user);
+    console.log(jsonRes1);
+
+
   }, []);
   const onSubmit = async (e) => {
     e.preventDefault();
