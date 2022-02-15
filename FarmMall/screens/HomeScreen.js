@@ -38,6 +38,9 @@ const HomeScreen = ({ navigation }) => {
   const addQues = async () => {
     navigation.navigate("AddQues");
   };
+  const pressHandeler = async () => {
+    navigation.navigate("UserProfile");
+  }
   const onSubmit = async () => {
     try {
       const url = "http://" + hostname + ":5000/api/logout";
@@ -132,16 +135,16 @@ const HomeScreen = ({ navigation }) => {
     );
   };
   return (
-    
+
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
     >
       <View style={style.header}>
         <View>
           <Text
-            style={{ fontSize: 30, color: COLORS.green, fontWeight: "bold" }}
+            style={{ fontSize: 28, color: COLORS.green, fontWeight: "bold" }}
           >
-            Farm Mall
+            Farm Discuss
           </Text>
         </View>
         <View style={style.icons}>
@@ -160,7 +163,7 @@ const HomeScreen = ({ navigation }) => {
           <TextInput placeholder="Search" style={style.input} />
         </View>
         <View style={style.sortBtn}>
-          <Icon name="sort" size={30} color={COLORS.white} />
+          <Icon name="account-circle" size={30} color={COLORS.white} onPress={pressHandeler} />
         </View>
       </View>
       <CategoryList />

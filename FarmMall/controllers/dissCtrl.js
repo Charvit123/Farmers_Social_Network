@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/userModel");
 const Comments = require("../models/cmntModel");
+const { request } = require("express");
 const dissCtrl = {
   addDetails: async (req, res) => {
     try {
@@ -33,14 +34,19 @@ const dissCtrl = {
         msg: "Details showed Successfully :)",
         getDiscussions,
       });
-    } catch (error) {}
+    } catch (error) { }
   },
-
+  usersPost: async (req, res) => {
+    const getUsersPost = await disscussSchema.find({ user: req.body.id }).sort("-createdAt");
+    res.json({
+      msg: "usersPost",
+      getUsersPost,
+    })
+  },
   addComment: async (req, res) => {
     try {
       const { cmnt, id, postId, postUser } = req.body;
 
-      // const com = await disscussSchema.findById(postId);
       const com = await disscussSchema.findOne({ _id: postId });
       if (!com)
         return res.status(400).json({ msg: "This Post does not exist." });
@@ -72,9 +78,12 @@ const dissCtrl = {
       res.json({
         comments,
       });
+      // console.log(comments);
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+
+    // console.log(req.body);
   },
 };
 module.exports = dissCtrl;
