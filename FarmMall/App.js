@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View ,Div} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
@@ -6,10 +6,27 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import AddQues from "./screens/AddQues";
 import postPage from "./screens/postPage";
+import io from 'socket.io-client'
+import { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SocketClient from "./socketClient";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return (
+  // const [id, setId] = useState();
+  // useEffect(async()=>{ 
+  //   const id=await AsyncStorage.getItem('id');
+  //   setId(id);
+  //   const socket=io('http://192.168.0.105:5000/');
+  //   socket.on('connection');
+  //   console.log(socket);
+  //   await AsyncStorage.setItem('socketId', socket);
+  // }, [])
+  return ( 
+    // <Div>
+      // {/* {id &&
+      //  <SocketClient/>
+      // } */}
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -19,6 +36,7 @@ export default function App() {
         <Stack.Screen name="Details" component={postPage} />
       </Stack.Navigator>
     </NavigationContainer>
+    // </Div>
   );
 }
 
