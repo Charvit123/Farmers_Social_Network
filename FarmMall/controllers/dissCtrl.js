@@ -53,11 +53,6 @@ const dissCtrl = {
         user: id,
       });
 
-      // console.log(req);
-      // await Comment.findOneAndUpdate({_id: postId}, {
-      //     $push: {comments: newCmnt._id}
-      // }, {new: true});
-
       await newCmnt.save();
 
       res.json({

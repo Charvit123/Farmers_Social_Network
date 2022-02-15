@@ -21,7 +21,7 @@ const state = {
 };
 const AddQues = ({ navigation }) => {
   const api = create({
-    baseURL: "http://192.168.29.71:5000/",
+    baseURL: "http://192.168.0.105:5000/",
   });
   const [Info, setInfo] = useState(state);
   const { title, description, picture } = Info;
@@ -29,7 +29,7 @@ const AddQues = ({ navigation }) => {
     setInfo({ ...Info, [name]: value });
   };
   let [img, setImg] = useState();
-  const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drrmqywlz/upload";
+  const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dxepcudkt/upload";
   const requestPermission = async () => {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
     if (!granted) alert("You need Permission for camera roll");
@@ -56,7 +56,7 @@ const AddQues = ({ navigation }) => {
 
     let data = {
       file: base64Img,
-      upload_preset: "g9kxy5yo",
+      upload_preset: "jxxkhti2",
     };
 
     const res = await fetch(CLOUDINARY_URL, {

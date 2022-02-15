@@ -47,7 +47,7 @@ const LoginScreen = ({navigation}) => {
         } catch (err) {
             console.log(err);
             // err.response.data.msg && setUserData({...userData, err: err.response.data.msg, success: ''});
-        }
+         }
   }
   return(
     <View style={styles.container}>

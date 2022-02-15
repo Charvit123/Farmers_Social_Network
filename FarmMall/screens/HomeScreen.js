@@ -132,6 +132,7 @@ const HomeScreen = ({ navigation }) => {
     );
   };
   return (
+    
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
     >
