@@ -9,13 +9,18 @@ import {
   Animated,
   TextInput,
   ScrollView,
+  RefreshControl,
+  Alert,
+  SafeAreaView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import hostname from "../const/hostname";
 import { isEmpty } from "./../utils/valid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShowCmnt from "./ShowCmnt";
+import { NavigationEvents } from "react-navigation";
+import COLORS from "./../const/colors";
 
 const state = {
   cmnt: "",
@@ -62,21 +67,25 @@ const ModalPoup = ({ visible, children }) => {
   );
 };
 
-
 const postPage = (disscussion) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const [userData, setUserData] = useState(state);
+
   const { cmnt, err, success } = userData;
+
   const onChangeHandler = (name, value) => {
     setUserData({ ...userData, [name]: value });
   };
+
   const info = disscussion.route.params.diss[1];
+
   const id = info.user;
-  const postId=info._id;
+  const postId = info._id;
+
   const [user, setUser] = useState({});
   const [comments, setCmnt] = useState({});
-  useEffect(async () => {
-    
+  const takeUserfunct = async (id) => {
     const url = "http://" + hostname + ":5000/api/finduser";
     const res = await fetch(url, {
       method: "POST",
@@ -87,18 +96,22 @@ const postPage = (disscussion) => {
     });
     const jsonRes = await res.json();
     setUser(jsonRes.user);
+  };
+  const takeComment = async (postId) => {
     const url1 = "http://" + hostname + ":5000/api/comment";
-    // console.log(info._id);
     const res1 = await fetch(url1, {
       method: "POST",
-      body: JSON.stringify({postId}),
+      body: JSON.stringify({ postId }),
       headers: {
         "Content-Type": "application/json",
       },
     });
     const jsonRes1 = await res1.json();
     setCmnt(jsonRes1.comments);
-    // console.log(jsonRes1);
+  };
+  useEffect(async () => {
+    await takeUserfunct(id);
+    await takeComment(postId);
   }, []);
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -114,7 +127,6 @@ const postPage = (disscussion) => {
       const postUser = info.user;
       const id = await AsyncStorage.getItem("id");
       const bodyEle = { cmnt, id, postId, postUser };
-      console.log(bodyEle);
       const url = "http://" + hostname + ":5000/api/addcomment";
       fetch(url, {
         method: "POST",
@@ -125,7 +137,7 @@ const postPage = (disscussion) => {
       })
         .then(async (res) => {
           const jsonRes = await res.json();
-          if (res.status != 500){
+          if (res.status != 500) {
             setVisible(false);
           }
         })
@@ -137,70 +149,103 @@ const postPage = (disscussion) => {
       console.log(error);
     }
   };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      takeComment(info._id);
+      setRefreshing(false);
+    }, 2000);
+  };
   // console.log(comments);
   return (
-
-  <View style={styles.container}>
-    <ScrollView>
-      {/* postpart */}
-      <View style={styles.subcontainer}>
-        <Text style={styles.title}>{info.title}</Text>
-        <View style={{ width: 300, height: 300, alignSelf: "center" }}>
-          <Image
-            source={{ uri: info.images[0] }}
-            style={{ width: "100%", height: 300, resizeMode: "contain" }}
-          />
-        </View>
-        <Text
-          style={{
-            alignSelf: "center",
-            padding: 5,
-            marginLeft: 25,
-            marginRight: 25,
-          }}
+    <SafeAreaView
+      style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
+    >
+      <View style={styles.container}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
-          {info.description}
-        </Text>
-      </View>
+          {/* post_part */}
 
-{/* cmnt part */ }
+          <View style={styles.subcontainer}>
+            <View style={styles.userprofile}>
+              <Image
+                style={styles.userimg}
+                source={{ uri: user.avatar }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 100,
+                  resizeMode: "contain",
+                }}
+              />
+              <View style={styles.userdetails}>
+                <Text>{user.username}</Text>
+                <Text>{user.email}</Text>
+              </View>
+            </View>
+            <Text style={styles.title}>{info.title}</Text>
+            <View style={{ width: 300, height: 300, alignSelf: "center" }}>
+              <Image
+                source={{ uri: info.images[0] }}
+                style={{ width: "100%", height: 300, resizeMode: "contain" }}
+              />
+            </View>
+            <Text
+              style={{
+                alignSelf: "center",
+                padding: 5,
+                marginLeft: 25,
+                marginRight: 25,
+              }}
+            >
+              {info.description}
+            </Text>
+          </View>
 
-        {comments &&
-          Object.entries(comments).map((item, i) => {
-            return <ShowCmnt passedComments={item} key={i} />;
-          })}
-  </ScrollView>
+          {/* cmnt_part */}
+          <View style={{ marginTop: 10 }}>
+            {comments &&
+              Object.entries(comments).map((item, i) => {
+                return <ShowCmnt passedComments={item} key={i} />;
+              })}
+          </View>
+        </ScrollView>
 
-      <View>
-        <ModalPoup visible={visible}>
-          <View style={{ alignItems: "center" }}>
-            <View style={styles.header}>
-              <TouchableOpacity onPress={() => setVisible(false)}>
-                <Icon name="close" size={35} />
+        <View>
+          <ModalPoup visible={visible}>
+            <View style={{ alignItems: "center" }}>
+              <View style={styles.header}>
+                <TouchableOpacity onPress={() => setVisible(false)}>
+                  <Icon name="close" size={35} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text>Comment</Text>
+              <TextInput
+                placeholder="Put your thougts"
+                onChangeText={(text) => onChangeHandler("cmnt", text)}
+                value={cmnt}
+                name="cmnt"
+              />
+            </View>
+
+            <View
+              style={{ marginVertical: 30, fontSize: 20, textAlign: "center" }}
+            >
+              <TouchableOpacity onPress={onSubmit}>
+                <Text>submit</Text>
               </TouchableOpacity>
             </View>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Text>Comment:-</Text>
-            <TextInput
-              placeholder="Put your thougts"
-              onChangeText={(text) => onChangeHandler("cmnt", text)}
-              value={cmnt}
-              name="cmnt"
-            />
-          </View>
-
-          <View
-            style={{ marginVertical: 30, fontSize: 20, textAlign: "center" }}
-          >
-            <TouchableOpacity onPress={onSubmit}>
-              <Text>submit</Text>
-            </TouchableOpacity>
-          </View>
-        </ModalPoup>
-        <Icon name="add-comment" size={35} onPress={() => setVisible(true)} />
+          </ModalPoup>
+          <Icon name="add-comment" size={35} onPress={() => setVisible(true)} />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -210,26 +255,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    //justifyContent: "center",
     fontFamily: "lucida grande",
     marginTop: 30,
+    paddingHorizontal: 15,
+    backgroundColor: COLORS.white,
   },
   subcontainer: {
-    maxWidth: "100%",
-    maxHeight: "100%",
-    borderColor: "black", // if you need
-    // borderWidth:1,
-    overflow: "hidden",
-    shadowColor: "black",
-    shadowRadius: 10,
-    shadowOpacity: 1,
-    elevation: 5,
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-    marginLeft: 20,
-    marginRight: 20,
+    // maxWidth: "100%",
+    // maxHeight: "100%",
+    // borderColor: "black",
+    // overflow: "hidden",
+    // shadowColor: "black",
+    // shadowRadius: 10,
+    // shadowOpacity: 1,
+    // elevation: 5,
+    // paddingTop: 20,
+    // paddingBottom: 20,
+    // paddingLeft: 20,
+    // paddingRight: 20,
+    // marginLeft: 20,
+    // marginRight: 20,
+    // height: 300,
+    marginTop: 5,
+    backgroundColor: COLORS.light,
+    width: "100%",
+    marginHorizontal: 2,
+    borderRadius: 10,
+    marginBottom: 20,
+    padding: 15,
+    display: "flex",
+    justifyContent: "space-around",
   },
   title: {
     marginTop: 5,

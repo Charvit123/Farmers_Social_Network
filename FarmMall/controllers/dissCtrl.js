@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/userModel");
 const Comments = require("../models/cmntModel");
+const { request } = require("express");
 const dissCtrl = {
   addDetails: async (req, res) => {
     try {
@@ -72,9 +73,12 @@ const dissCtrl = {
       res.json({
         comments,
       });
+     // console.log(comments);
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
+
+    // console.log(req.body);
   },
 };
 module.exports = dissCtrl;
