@@ -158,7 +158,6 @@ const postPage = (disscussion) => {
       setRefreshing(false);
     }, 2000);
   };
-  // console.log(comments);
   return (
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}

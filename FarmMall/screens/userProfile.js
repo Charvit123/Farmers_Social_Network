@@ -10,6 +10,13 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import hostname from "../const/hostname";
 import COLORS from "../const/colors";
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const userProfile = ({ navigation }) => {
     const [user, setUser] = useState({});
@@ -41,12 +48,28 @@ const userProfile = ({ navigation }) => {
     }, []);
 
     const Card = (diss) => {
+        const onDelete = async () => {
+            console.log(diss.diss[1]._id);
+            id = diss.diss[1]._id;
+            const url = "http://" + hostname + ":5000/api/deletePost";
+            const res = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ id }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            navigation.navigate("Home");
+        }
         return (
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => navigation.navigate("Details", diss)}
             >
                 <View style={style.card}>
+                    <View>
+                        <Icon name="delete" onPress={onDelete} size={28} ></Icon>
+                    </View>
                     <View
                         style={{
                             height: 200,
@@ -80,7 +103,7 @@ const userProfile = ({ navigation }) => {
     };
 
     return (
-        <View>
+        <View style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}>
             <View style={style.userprofile}>
                 <Image
                     style={style.userimg}
@@ -112,7 +135,7 @@ const userProfile = ({ navigation }) => {
 export default userProfile;
 const style = StyleSheet.create({
     container: {
-        height: 100,
+        height: 200,
         backgroundColor: COLORS.light,
         width: "100%",
         marginHorizontal: 2,
@@ -124,7 +147,7 @@ const style = StyleSheet.create({
         justifyContent: "space-around",
     },
     card: {
-        height: 300,
+        height: 310,
         backgroundColor: COLORS.light,
         width: "100%",
         marginHorizontal: 2,
@@ -145,10 +168,10 @@ const style = StyleSheet.create({
     userprofile: {
         display: "flex",
         flexDirection: "row",
+        marginVertical: 10,
     },
     userdetails: {
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "space-between",
-        marginTop: 10,
     },
 });

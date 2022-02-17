@@ -8,6 +8,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  RefreshControl
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -18,8 +19,8 @@ import hostname from "../const/hostname";
 
 const HomeScreen = ({ navigation }) => {
   const [discussions, setDiscussions] = useState([]);
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  useEffect(async () => {
+  const [refreshing, setRefreshing] = useState(false);
+  const takePost = async () => {
     const url = "http://" + hostname + ":5000/api/showDiscussions";
     await fetch(url, {
       method: "GET",
@@ -34,6 +35,9 @@ const HomeScreen = ({ navigation }) => {
       .catch((err) => {
         console.log(err);
       });
+  }
+  useEffect(async () => {
+    await takePost();
   }, []);
   const addQues = async () => {
     navigation.navigate("AddQues");
@@ -134,6 +138,13 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      takePost();
+      setRefreshing(false);
+    }, 2000);
+  };
   return (
 
     <SafeAreaView
@@ -167,7 +178,11 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
       <CategoryList />
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {discussions &&
           Object.entries(discussions).map((item, i) => {
             return <Card diss={item} key={i} />;
