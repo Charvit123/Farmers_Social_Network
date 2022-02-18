@@ -59,7 +59,7 @@ const userProfile = ({ navigation }) => {
                     "Content-Type": "application/json",
                 },
             });
-            navigation.navigate("Home");
+            navigation.push("Home");
         }
         return (
             <TouchableOpacity

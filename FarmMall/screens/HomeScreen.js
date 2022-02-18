@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const [catergoryIndex, setCategoryIndex] = React.useState(0);
 
-  const categories = ["POPULAR", "ORGANIC", "DISEASE", "WEATHER"];
+  const categories = ["All POSTS", "POPULAR", "WEATHER"];
 
   const CategoryList = () => {
     return (

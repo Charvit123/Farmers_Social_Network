@@ -76,7 +76,6 @@ export default ShowCmnt;
 
 const styles = StyleSheet.create({
   container: {
-
     height: 100,
     backgroundColor: COLORS.light,
     width: "100%",
@@ -85,9 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 15,
     display: "flex",
-
     justifyContent: "space-around",
-
   },
   userimg: {
     height: 5,
@@ -95,13 +92,13 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   userprofile: {
-    display: "flex",
     flexDirection: "row",
 
   },
   userdetails: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     marginTop: 10,
   },
+
 });
