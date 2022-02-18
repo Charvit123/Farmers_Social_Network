@@ -38,6 +38,10 @@ const HomeScreen = ({ navigation }) => {
   const addQues = async () => {
     navigation.navigate("AddQues");
   };
+
+  const pressHandler = async () => {
+    navigation.navigate("userProfile");
+  };
   const onSubmit = async () => {
     try {
       const url = "http://" + hostname + ":5000/api/logout";
@@ -108,7 +112,12 @@ const HomeScreen = ({ navigation }) => {
           >
             <Image
               source={{ uri: diss.diss[1].images[0] }}
-              style={{ resizeMode: "contain", width: "100%", height: 200 }}
+              style={{
+                resizeMode: "cover",
+                flex: 1,
+                height: 200,
+                width: "100%",
+              }}
             />
           </View>
           <View style={style.cardInfo}>
@@ -122,7 +131,10 @@ const HomeScreen = ({ navigation }) => {
                 marginTop: 5,
               }}
             >
-              <Text style={{ fontSize: 13, fontWeight: "bold" }}>
+              <Text
+                style={{ fontSize: 13, fontWeight: "bold" }}
+                numberOfLines={2}
+              >
                 {diss.diss[1].description}
               </Text>
             </View>
@@ -132,7 +144,6 @@ const HomeScreen = ({ navigation }) => {
     );
   };
   return (
-    
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
     >
@@ -141,7 +152,7 @@ const HomeScreen = ({ navigation }) => {
           <Text
             style={{ fontSize: 30, color: COLORS.green, fontWeight: "bold" }}
           >
-            Farm Mall
+            FarmersNetwork
           </Text>
         </View>
         <View style={style.icons}>
@@ -160,11 +171,16 @@ const HomeScreen = ({ navigation }) => {
           <TextInput placeholder="Search" style={style.input} />
         </View>
         <View style={style.sortBtn}>
-          <Icon name="sort" size={30} color={COLORS.white} />
+          <Icon
+            name="account-circle"
+            size={30}
+            color={COLORS.white}
+            onPress={pressHandler}
+          />
         </View>
       </View>
       <CategoryList />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {discussions &&
           Object.entries(discussions).map((item, i) => {
             return <Card diss={item} key={i} />;
@@ -234,7 +250,7 @@ const style = StyleSheet.create({
     marginLeft: 10,
     height: 50,
     width: 50,
-    borderRadius: 10,
+    borderRadius: 50,
     backgroundColor: COLORS.green,
     justifyContent: "center",
     alignItems: "center",

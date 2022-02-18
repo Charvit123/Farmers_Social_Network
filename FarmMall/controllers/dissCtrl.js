@@ -37,6 +37,14 @@ const dissCtrl = {
     } catch (error) {}
   },
 
+  usersPost: async (req, res) => {
+    const getUsersPost = await disscussSchema.find({ user: req.body.id }).sort("-createdAt");
+    res.json({
+      msg: "usersPost",
+      getUsersPost,
+    })
+  },
+
   addComment: async (req, res) => {
     try {
       const { cmnt, id, postId, postUser } = req.body;
@@ -80,5 +88,7 @@ const dissCtrl = {
 
     // console.log(req.body);
   },
+
+
 };
 module.exports = dissCtrl;

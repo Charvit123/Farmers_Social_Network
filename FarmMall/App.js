@@ -6,6 +6,8 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import AddQues from "./screens/AddQues";
 import postPage from "./screens/postPage";
+import userProfile from "./screens/userProfile";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -17,6 +19,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddQues" component={AddQues} />
         <Stack.Screen name="Details" component={postPage} />
+        <Stack.Screen name="userProfile" component={userProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
