@@ -72,6 +72,7 @@ const postPage = (disscussion) => {
   const [visible, setVisible] = useState(false);
   const [userData, setUserData] = useState(state);
 
+
   const { cmnt, err, success } = userData;
 
   const onChangeHandler = (name, value) => {
@@ -157,7 +158,6 @@ const postPage = (disscussion) => {
       setRefreshing(false);
     }, 2000);
   };
-  // console.log(comments);
   return (
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}

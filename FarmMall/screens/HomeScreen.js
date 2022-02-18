@@ -8,6 +8,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  RefreshControl
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -18,8 +19,8 @@ import hostname from "../const/hostname";
 
 const HomeScreen = ({ navigation }) => {
   const [discussions, setDiscussions] = useState([]);
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  useEffect(async () => {
+  const [refreshing, setRefreshing] = useState(false);
+  const takePost = async () => {
     const url = "http://" + hostname + ":5000/api/showDiscussions";
     await fetch(url, {
       method: "GET",
@@ -34,14 +35,16 @@ const HomeScreen = ({ navigation }) => {
       .catch((err) => {
         console.log(err);
       });
+  }
+  useEffect(async () => {
+    await takePost();
   }, []);
   const addQues = async () => {
     navigation.navigate("AddQues");
   };
-
-  const pressHandler = async () => {
-    navigation.navigate("userProfile");
-  };
+  const pressHandeler = async () => {
+    navigation.navigate("UserProfile");
+  }
   const onSubmit = async () => {
     try {
       const url = "http://" + hostname + ":5000/api/logout";
@@ -143,6 +146,13 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      takePost();
+      setRefreshing(false);
+    }, 2000);
+  };
   return (
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
@@ -150,9 +160,9 @@ const HomeScreen = ({ navigation }) => {
       <View style={style.header}>
         <View>
           <Text
-            style={{ fontSize: 30, color: COLORS.green, fontWeight: "bold" }}
+            style={{ fontSize: 28, color: COLORS.green, fontWeight: "bold" }}
           >
-            FarmersNetwork
+            Farm Discuss
           </Text>
         </View>
         <View style={style.icons}>
@@ -171,16 +181,15 @@ const HomeScreen = ({ navigation }) => {
           <TextInput placeholder="Search" style={style.input} />
         </View>
         <View style={style.sortBtn}>
-          <Icon
-            name="account-circle"
-            size={30}
-            color={COLORS.white}
-            onPress={pressHandler}
-          />
+          <Icon name="account-circle" size={30} color={COLORS.white} onPress={pressHandeler} />
         </View>
       </View>
       <CategoryList />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {discussions &&
           Object.entries(discussions).map((item, i) => {
             return <Card diss={item} key={i} />;

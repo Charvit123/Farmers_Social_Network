@@ -3,17 +3,21 @@ import {
   Text,
   View,
   Image,
- 
+
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import hostname from "../const/hostname";
 import COLORS from "./../const/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { Directions } from "react-native-gesture-handler";
 
-const ShowCmnt=(passedComments)=>{
-    const [cmntUser, setCmntuser] = useState("");
-    const id=passedComments.passedComments[1].user;
+const ShowCmnt = (passedComments) => {
+  const [cmntUser, setCmntuser] = useState("");
+  const [loggedinUser, setloggedinUser] = useState("");
+  const id = passedComments.passedComments[1].user;
   useEffect(async () => {
-      
+    setloggedinUser(await AsyncStorage.getItem("id"));
     const url2 = "http://" + hostname + ":5000/api/finduser";
     const res2 = await fetch(url2, {
       method: "POST",
@@ -24,43 +28,57 @@ const ShowCmnt=(passedComments)=>{
     });
     const jsonRes2 = await res2.json();
     setCmntuser(jsonRes2.user)
-    // console.log(jsonRes2)
-    }, []);
-  // console.log(passedComments.passedComments[1])
-  return(
-    
-      <View style={styles.container}>
-        <View style={styles.userprofile}>
+  }, []);
+  const cmntDelete = async () => {
+    alert("Do you want to delete cmnt??")
+    const id = passedComments.passedComments[1]._id;
+    const url = "http://" + hostname + ":5000/api/deleteCmnt";
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+  return (
+
+    <View style={styles.container}>
+      <View style={styles.userprofile}>
         <Image
-              style={styles.userimg}
-              source={{ uri: cmntUser.avatar }}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 100,
-                resizeMode: "contain",
-              }}
-            />
-        
+          style={styles.userimg}
+          source={{ uri: cmntUser.avatar }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 100,
+            resizeMode: "contain",
+          }}
+        />
+
         <View style={styles.userdetails}>
-        <Text style={{marginLeft:10,}}>{cmntUser.username}</Text>
-        {/* <Text>{cmntUser.email}</Text> */}
+          <Text style={{ marginLeft: 10, }}>{cmntUser.username}</Text>
+          {/* <Text>{cmntUser.email}</Text> */}
         </View>
-       
-        </View>
-        <View style={{marginTop:10,}}>
-        <Text>{passedComments.passedComments[1].cmnt}</Text>
-        </View>
-        </View>
-        
-      
+
+      </View>
+      <View style={styles.comtcont}>
+        <Text style={{marginTop:10,}}>{passedComments.passedComments[1].cmnt}</Text>
+        {(id == loggedinUser) &&
+        <Icon name="delete" size={20} onPress={cmntDelete} style={styles.icon}></Icon>
+      }
+      </View>
+     
+    </View>
+
+
   );
 };
 export default ShowCmnt;
 
 const styles = StyleSheet.create({
   container: {
-  
+
     height: 100,
     backgroundColor: COLORS.light,
     width: "100%",
@@ -69,10 +87,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 15,
     display: "flex",
-    
+
     justifyContent: "space-around",
-    
-  },  
+
+  },
   userimg: {
     height: 5,
     width: 5,
@@ -81,11 +99,21 @@ const styles = StyleSheet.create({
   userprofile: {
     display: "flex",
     flexDirection: "row",
-   
+
   },
   userdetails: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
   },
+  icon:{
+    alignSelf:"flex-end",
+    marginTop:5,
+  },
+  comtcont:{
+       display:"flex",
+       flexDirection:"column",
+       marginTop:15,
+       
+  }
 });

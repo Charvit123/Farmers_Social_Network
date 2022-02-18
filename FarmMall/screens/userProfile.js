@@ -11,7 +11,13 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import hostname from "../const/hostname";
 import COLORS from "../const/colors";
-
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from "react-native-popup-menu";
+import Icon from "react-native-vector-icons/MaterialIcons";
 const userProfile = ({ navigation }) => {
   const [user, setUser] = useState({});
   const [diss, setPost] = useState({});
@@ -42,12 +48,26 @@ const userProfile = ({ navigation }) => {
   }, []);
 
   const Card = (diss) => {
+    const onDelete = async () => {
+      console.log(diss.diss[1]._id);
+      id = diss.diss[1]._id;
+      const url = "http://" + hostname + ":5000/api/deletePost";
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({ id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      navigation.navigate("Home");
+    };
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => navigation.navigate("Details", diss)}
       >
         <View style={style.card}>
+         
           <View
             style={{
               height: 200,
@@ -62,7 +82,6 @@ const userProfile = ({ navigation }) => {
                 height: 200,
                 width: "100%",
               }}
-              
             />
           </View>
           <View style={style.cardInfo}>
@@ -82,7 +101,12 @@ const userProfile = ({ navigation }) => {
               >
                 {diss.diss[1].description}
               </Text>
+
+            
+             
+        
             </View>
+            <Icon name="delete" onPress={onDelete} size={28} style={{ alignSelf:"flex-end", }}></Icon>
           </View>
         </View>
       </TouchableOpacity>
@@ -93,41 +117,37 @@ const userProfile = ({ navigation }) => {
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
     >
-     
-        <View style={style.userprofile}>
-          <Image
-            style={style.userimg}
-            source={{ uri: user.avatar }}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 100,
-              resizeMode: "contain",
-            }}
-          />
+      <View style={style.userprofile}>
+        <Image
+          style={style.userimg}
+          source={{ uri: user.avatar }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 100,
+            resizeMode: "contain",
+          }}
+        />
 
-          <View style={style.userdetails}>
-            <Text style={{ marginLeft: 10 }}>{user.username}</Text>
-            <Text style={{ marginLeft: 10 }}>{user.email}</Text>
-          </View>
+        <View style={style.userdetails}>
+          <Text style={{ marginLeft: 10 }}>{user.username}</Text>
+          <Text style={{ marginLeft: 10 }}>{user.email}</Text>
         </View>
-      
-        
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {diss &&
-              Object.entries(diss).map((item, i) => {
-                return <Card diss={item} key={i} />;
-              })}
-          </ScrollView>
-        
-   
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {diss &&
+          Object.entries(diss).map((item, i) => {
+            return <Card diss={item} key={i} />;
+          })}
+      </ScrollView>
     </SafeAreaView>
   );
 };
-
 export default userProfile;
 const style = StyleSheet.create({
   container: {
+    height: 200,
     backgroundColor: COLORS.light,
     width: "100%",
     marginHorizontal: 2,
@@ -135,11 +155,11 @@ const style = StyleSheet.create({
     marginBottom: 10,
     padding: 15,
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
+
+    justifyContent: "space-around",
   },
   card: {
-    height: 300,
+    height: 310,
     backgroundColor: COLORS.light,
     width: "100%",
     marginHorizontal: 2,
@@ -152,26 +172,20 @@ const style = StyleSheet.create({
   cardInfo: {
     marginTop: 30,
   },
-  userPost: {
-    marginTop: 50,
-  },
   userimg: {
-    height: 15,
-    width: 15,
+    height: 5,
+    width: 5,
     borderRadius: 50,
   },
   userprofile: {
     display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    marginTop:10,
-    paddingBottom:20,
+    flexDirection: "row",
+    marginVertical: 10,
+    alignContent:"center",
+    alignSelf:"center",
   },
   userdetails: {
     flexDirection: "column",
     justifyContent: "space-between",
-    marginTop: 10,
-    marginLeft: 5,
-    alignItems: "center",
   },
 });
