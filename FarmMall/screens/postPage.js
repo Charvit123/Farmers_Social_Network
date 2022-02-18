@@ -164,6 +164,7 @@ const postPage = (disscussion) => {
     >
       <View style={styles.container}>
         <ScrollView
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }

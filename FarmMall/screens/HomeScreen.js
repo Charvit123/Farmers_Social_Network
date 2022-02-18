@@ -115,7 +115,12 @@ const HomeScreen = ({ navigation }) => {
           >
             <Image
               source={{ uri: diss.diss[1].images[0] }}
-              style={{ resizeMode: "contain", width: "100%", height: 200 }}
+              style={{
+                resizeMode: "cover",
+                flex: 1,
+                height: 200,
+                width: "100%",
+              }}
             />
           </View>
           <View style={style.cardInfo}>
@@ -129,7 +134,10 @@ const HomeScreen = ({ navigation }) => {
                 marginTop: 5,
               }}
             >
-              <Text style={{ fontSize: 13, fontWeight: "bold" }}>
+              <Text
+                style={{ fontSize: 13, fontWeight: "bold" }}
+                numberOfLines={2}
+              >
                 {diss.diss[1].description}
               </Text>
             </View>
@@ -146,7 +154,6 @@ const HomeScreen = ({ navigation }) => {
     }, 2000);
   };
   return (
-
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
     >
@@ -252,7 +259,7 @@ const style = StyleSheet.create({
     marginLeft: 10,
     height: 50,
     width: 50,
-    borderRadius: 10,
+    borderRadius: 50,
     backgroundColor: COLORS.green,
     justifyContent: "center",
     alignItems: "center",

@@ -6,7 +6,6 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import AddQues from "./screens/AddQues";
 import postPage from "./screens/postPage";
-import io from 'socket.io-client'
 import { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userProfile from "./screens/userProfile";
