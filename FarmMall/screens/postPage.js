@@ -12,6 +12,7 @@ import {
   RefreshControl,
   Alert,
   SafeAreaView,
+  BlurView
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -236,9 +237,9 @@ const postPage = (disscussion) => {
             </View>
 
             <View
-              style={{ marginVertical: 30, fontSize: 20, textAlign: "center" }}
+              style={{ marginVertical: 30, fontSize: 20 }}
             >
-              <TouchableOpacity onPress={onSubmit}>
+              <TouchableOpacity onPress={onSubmit} style={{ left: 110 }}>
                 <Text>submit</Text>
               </TouchableOpacity>
             </View>
@@ -246,7 +247,7 @@ const postPage = (disscussion) => {
           <Icon name="add-comment" size={35} onPress={() => setVisible(true)} />
         </View>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
@@ -260,6 +261,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingHorizontal: 15,
     backgroundColor: COLORS.white,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative"
   },
   subcontainer: {
     // maxWidth: "100%",
@@ -311,8 +318,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: "80%",
     backgroundColor: "white",
+    // modalBackGround: "blur",
     paddingHorizontal: 20,
     paddingVertical: 30,
+    marginLeft: 40,
+    marginTop: 260,
     borderRadius: 20,
     elevation: 20,
   },
