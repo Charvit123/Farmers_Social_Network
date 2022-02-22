@@ -8,7 +8,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation }) => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
   useEffect(async () => {
     await takePost();
   }, []);
@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const pressHandeler = async () => {
     navigation.navigate("UserProfile");
-  }
+  };
   const onSubmit = async () => {
     try {
       const url = "http://" + hostname + ":5000/api/logout";
@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const [catergoryIndex, setCategoryIndex] = React.useState(0);
 
-  const categories = ["POPULAR", "ORGANIC", "DISEASE", "WEATHER"];
+  const categories = ["All POSTS", "POPULAR", "WEATHER"];
 
   const CategoryList = () => {
     return (
@@ -161,6 +161,7 @@ const HomeScreen = ({ navigation }) => {
         <View>
           <Text
             style={{ fontSize: 28, color: COLORS.green, fontWeight: "bold" }}
+            onPress={() => navigation.navigate("Weather")}
           >
             Farm Discuss
           </Text>
@@ -181,7 +182,12 @@ const HomeScreen = ({ navigation }) => {
           <TextInput placeholder="Search" style={style.input} />
         </View>
         <View style={style.sortBtn}>
-          <Icon name="account-circle" size={30} color={COLORS.white} onPress={pressHandeler} />
+          <Icon
+            name="account-circle"
+            size={30}
+            color={COLORS.white}
+            onPress={pressHandeler}
+          />
         </View>
       </View>
       <CategoryList />
