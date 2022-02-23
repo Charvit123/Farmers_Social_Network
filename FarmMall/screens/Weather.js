@@ -12,7 +12,7 @@ import {
   RefreshControl,
 } from "react-native";
 import * as Location from "expo-location";
-
+import COLORS from "./../const/colors";
 // import { openWeatherKey } from './Secrets';
 const openWeatherKey = `ab70d946be8168cdeb0787e057c6b21d`;
 let url = `https://api.openweathermap.org/data/2.5/onecall?&units=metric&exclude=minutely&appid=${openWeatherKey}`;
@@ -86,9 +86,10 @@ const Weather = ({ navigation }) => {
           <Text style={styles.currentTemp}>
             {Math.round(forecast.current.temp)}°C
           </Text>
+        
         </View>
-
         <Text style={styles.currentDescription}>{current.description}</Text>
+       
         <View>
           <Text style={styles.subtitle}>Hourly Forecast</Text>
           <FlatList
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     marginLeft: 4,
     color: "#e96e50",
+    alignSelf:"center",
   },
   container: {
     flex: 1,
@@ -167,6 +169,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   current: {
+    height: 250,
+    backgroundColor: COLORS.light,
+    width: "90%",
+    marginHorizontal: 2,
+    borderRadius: 40,
+    marginBottom: 20,
+    marginLeft: 20,
+    padding: 15,
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     alignContent: "center",
@@ -184,11 +195,22 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   hour: {
+     
+    backgroundColor: COLORS.light,
+    borderRadius:10,
     padding: 6,
+    marginLeft:7,
     alignItems: "center",
   },
   day: {
+    backgroundColor: COLORS.light,
+    borderRadius:10,
+    padding: 6,
+    marginTop:5,
+    width:"90%",
     flexDirection: "row",
+    justifyContent: "center",
+    alignSelf:"center",
   },
   dayDetails: {
     justifyContent: "center",
