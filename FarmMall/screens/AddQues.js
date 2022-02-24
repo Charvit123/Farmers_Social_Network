@@ -117,7 +117,7 @@ const AddQues = ({ navigation }) => {
         />
         
       </TouchableOpacity> */}
-      <Icon name="image"  size={35} onPress={takeimage} />
+      <Icon name="image" size={35} onPress={takeimage} />
       <Text>Upload Image</Text>
       <TouchableOpacity style={styles.Button} onPress={onSubmit}>
         <Text style={styles.ButtonText}>Submit</Text>

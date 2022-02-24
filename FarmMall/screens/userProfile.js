@@ -5,6 +5,7 @@ import {
     Image,
     ScrollView,
     StyleSheet,
+    SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,9 +16,8 @@ import {
     MenuOptions,
     MenuOption,
     MenuTrigger,
-} from 'react-native-popup-menu';
+} from "react-native-popup-menu";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
 const userProfile = ({ navigation }) => {
     const [user, setUser] = useState({});
     const [diss, setPost] = useState({});
@@ -59,17 +59,15 @@ const userProfile = ({ navigation }) => {
                     "Content-Type": "application/json",
                 },
             });
-            navigation.push("Home");
-        }
+            navigation.navigate("Home");
+        };
         return (
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => navigation.navigate("Details", diss)}
             >
                 <View style={style.card}>
-                    <View>
-                        <Icon name="delete" onPress={onDelete} size={28} ></Icon>
-                    </View>
+
                     <View
                         style={{
                             height: 200,
@@ -78,7 +76,12 @@ const userProfile = ({ navigation }) => {
                     >
                         <Image
                             source={{ uri: diss.diss[1].images[0] }}
-                            style={{ resizeMode: "contain", width: "100%", height: 200 }}
+                            style={{
+                                resizeMode: "cover",
+                                flex: 1,
+                                height: 200,
+                                width: "100%",
+                            }}
                         />
                     </View>
                     <View style={style.cardInfo}>
@@ -92,10 +95,18 @@ const userProfile = ({ navigation }) => {
                                 marginTop: 5,
                             }}
                         >
-                            <Text style={{ fontSize: 13, fontWeight: "bold" }}>
+                            <Text
+                                style={{ fontSize: 13, fontWeight: "bold" }}
+                                numberOfLines={2}
+                            >
                                 {diss.diss[1].description}
                             </Text>
+
+
+
+
                         </View>
+                        <Icon name="delete" onPress={onDelete} size={28} style={{ alignSelf: "flex-end", }}></Icon>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -103,7 +114,9 @@ const userProfile = ({ navigation }) => {
     };
 
     return (
-        <View style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}>
+        <SafeAreaView
+            style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
+        >
             <View style={style.userprofile}>
                 <Image
                     style={style.userimg}
@@ -118,20 +131,19 @@ const userProfile = ({ navigation }) => {
 
                 <View style={style.userdetails}>
                     <Text style={{ marginLeft: 10 }}>{user.username}</Text>
-                    <Text>{user.email}</Text>
+                    <Text style={{ marginLeft: 10 }}>{user.email}</Text>
                 </View>
             </View>
 
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 {diss &&
                     Object.entries(diss).map((item, i) => {
                         return <Card diss={item} key={i} />;
                     })}
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 };
-
 export default userProfile;
 const style = StyleSheet.create({
     container: {
@@ -169,6 +181,8 @@ const style = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         marginVertical: 10,
+        alignContent: "center",
+        alignSelf: "center",
     },
     userdetails: {
         flexDirection: "column",

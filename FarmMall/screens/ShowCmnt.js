@@ -10,6 +10,7 @@ import hostname from "../const/hostname";
 import COLORS from "./../const/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { Directions } from "react-native-gesture-handler";
 
 const ShowCmnt = (passedComments) => {
   const [cmntUser, setCmntuser] = useState("");
@@ -61,12 +62,13 @@ const ShowCmnt = (passedComments) => {
         </View>
 
       </View>
-      <View style={{ marginTop: 10, }}>
-        <Text>{passedComments.passedComments[1].cmnt}</Text>
+      <View style={styles.comtcont}>
+        <Text style={{ marginTop: 10, }}>{passedComments.passedComments[1].cmnt}</Text>
+        {(id == loggedinUser) &&
+          <Icon name="delete" size={20} onPress={cmntDelete} style={styles.icon}></Icon>
+        }
       </View>
-      {(id == loggedinUser) &&
-        <Icon name="delete" size={35} onPress={cmntDelete}></Icon>
-      }
+
     </View>
 
 
@@ -100,5 +102,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 10,
   },
+  icon: {
+    alignSelf: "flex-end",
+    marginTop: 5,
+  },
+  comtcont: {
+    display: "flex",
+    flexDirection: "column",
+    marginTop: 15,
 
+  }
 });
