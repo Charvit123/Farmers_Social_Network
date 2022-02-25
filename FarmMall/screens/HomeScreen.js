@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  ImageBackground,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
