@@ -11,7 +11,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import userProfile from "./screens/userProfile";
 import { MenuProvider } from 'react-native-popup-menu';
 import Weather from "./screens/Weather";
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {

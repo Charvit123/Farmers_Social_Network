@@ -57,6 +57,14 @@ const dissCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+  search: async (req, res) => {
+        try {
+            const posts = await disscussSchema.find({title: {$regex: req.query.news}});
+            res.json({posts});
+        } catch (err) {
+            return res.status(500).json({msg: err.message});
+        }
+  },
   addComment: async (req, res) => {
     try {
       const { cmnt, id, postId, postUser } = req.body;

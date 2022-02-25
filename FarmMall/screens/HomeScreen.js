@@ -8,7 +8,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -16,10 +16,41 @@ import React, { useEffect, useState } from "react";
 import { create } from "apisauce";
 import COLORS from "./../const/colors";
 import hostname from "../const/hostname";
-
+const state = {
+       search: "",
+};
 const HomeScreen = ({ navigation }) => {
   const [discussions, setDiscussions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  const [search, setSearch] = useState('');
+   const onChangeHandler =(e)=> {
+        // console.log(e.replace(/ /g, ''));
+        setSearch(e.replace(/ /g, ''));
+    }
+
+  const handleSearch = async (e) => {
+        e.preventDefault();
+        if(!search) 
+            return;
+
+        try {
+            const url = `http://192.168.0.105:5000/api/search?news=${search}`;
+            const res =await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            })
+            const jsonRes = await res.json();
+            // console.log(jsonRes);
+            setDiscussions(jsonRes.posts);
+            navigation.navigate("Home");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
   const takePost = async () => {
     const url = "http://" + hostname + ":5000/api/showDiscussions";
     await fetch(url, {
@@ -35,8 +66,9 @@ const HomeScreen = ({ navigation }) => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
   useEffect(async () => {
+    // console.log("1");
     await takePost();
   }, []);
   const addQues = async () => {
@@ -44,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const pressHandeler = async () => {
     navigation.navigate("UserProfile");
-  }
+  };
   const onSubmit = async () => {
     try {
       const url = "http://" + hostname + ":5000/api/logout";
@@ -67,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const [catergoryIndex, setCategoryIndex] = React.useState(0);
 
-  const categories = ["All POSTS", "POPULAR", "WEATHER"];
+  const categories = ["ALL POSTS", "POPULAR", "WEATHER"];
 
   const CategoryList = () => {
     return (
@@ -76,8 +108,8 @@ const HomeScreen = ({ navigation }) => {
           <TouchableOpacity
             key={index}
             activeOpacity={0.8}
-            onPress={() => setCategoryIndex(index)}
-          >
+            // onPress={() => setCategoryIndex(index)}
+            onPress={() => {index === 2 ? navigation.navigate("Weather") && setCategoryIndex(index) : setCategoryIndex(index)}}>
             <Text
               style={[
                 style.categoryText,
@@ -161,7 +193,7 @@ const HomeScreen = ({ navigation }) => {
         <View>
           <Text
             style={{ fontSize: 28, color: COLORS.green, fontWeight: "bold" }}
-            onPress={() => navigation.navigate("Weather")}
+            onPress={() => navigation.push("Home")}
           >
             Farm Discuss
           </Text>
@@ -178,11 +210,19 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <View style={{ marginTop: 15, flexDirection: "row" }}>
         <View style={style.searchContainer}>
-          <Icon name="search" size={25} style={{ marginLeft: 20 }} />
-          <TextInput placeholder="Search" style={style.input} />
+          <Icon name="search" size={25} style={{ marginLeft: 20 }} onPress={handleSearch} />
+          <TextInput placeholder="Search" style={style.input}
+          //  onChange={e => setSearch(e.target.value.replace(/ /g, ''))}
+           onChangeText={(text) => onChangeHandler(text)}
+           />
         </View>
         <View style={style.sortBtn}>
-          <Icon name="account-circle" size={30} color={COLORS.white} onPress={pressHandeler} />
+          <Icon
+            name="account-circle"
+            size={30}
+            color={COLORS.white}
+            onPress={pressHandeler}
+          />
         </View>
       </View>
       <CategoryList />
