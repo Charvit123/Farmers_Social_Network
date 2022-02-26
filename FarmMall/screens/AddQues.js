@@ -21,7 +21,7 @@ const state = {
 };
 const AddQues = ({ navigation }) => {
   const api = create({
-    baseURL: "http://192.168.0.105:5000/",
+    baseURL: "http://192.168.29.71:5000/",
   });
   const [Info, setInfo] = useState(state);
   const { title, description, picture } = Info;
