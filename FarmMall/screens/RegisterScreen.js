@@ -23,10 +23,6 @@ const state = {
 };
     
 const RegisterScreen = ({navigation})=>{
-    const api=create({
-      baseURL:'http://192.168.29.71:5000/'
-    })
-
   const [userData,setUser]=useState(state);
   const { username, email, password ,cpassword,err,success} = userData;
   const onChangeHandler =(name,value)=> {

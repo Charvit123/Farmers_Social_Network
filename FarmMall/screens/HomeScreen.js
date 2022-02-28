@@ -17,16 +17,17 @@ import React, { useEffect, useState } from "react";
 import { create } from "apisauce";
 import COLORS from "./../const/colors";
 import hostname from "../const/hostname";
+import Weather from "./Weather";
 const state = {
   search: "",
 };
 const HomeScreen = ({ navigation }) => {
   const [discussions, setDiscussions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [weather, setweather] = useState(false);
 
   const [search, setSearch] = useState("");
   const onChangeHandler = (e) => {
-    // console.log(e.replace(/ /g, ''));
     setSearch(e.replace(/ /g, ""));
   };
 
@@ -35,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
     if (!search) return;
 
     try {
-      const url = `http://192.168.0.105:5000/api/search?news=${search}`;
+      const url = `http://192.168.11.30:5000/api/search?news=${search}`;
       const res = await fetch(url, {
         method: "GET",
         headers: {
@@ -110,9 +111,8 @@ const HomeScreen = ({ navigation }) => {
             activeOpacity={0.8}
             // onPress={() => setCategoryIndex(index)}
             onPress={() => {
-              index === 2
-                ? navigation.navigate("Weather") && setCategoryIndex(index)
-                : setCategoryIndex(index);
+              setCategoryIndex(index);
+              index === 2? setweather(true) : setweather(false) ;
             }}
           >
             <Text
@@ -234,6 +234,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
       <CategoryList />
+      {!weather &&
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -244,6 +245,16 @@ const HomeScreen = ({ navigation }) => {
             return <Card diss={item} key={i} />;
           })}
       </ScrollView>
+      }
+      {weather &&
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Weather/>
+      </ScrollView>
+      }
     </SafeAreaView>
   );
 };

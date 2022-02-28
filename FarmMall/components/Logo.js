@@ -6,7 +6,7 @@ const Logo = () => {
 			<View style={styles.container}>
 				<Image  style={{width:40, height: 70}}
           			source={require('../images/logo.png')}/>
-          		<Text style={styles.logoText}>Welcome to FarmMall.</Text>	
+          		<Text style={styles.logoText}>Welcome to FarmDiscuss.</Text>	
   			</View>
 			)
 	}

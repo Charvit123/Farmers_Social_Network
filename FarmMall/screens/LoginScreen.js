@@ -40,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
     if (isLength(password))
       return setUser({
         ...userData,
-        err: "Password must be at least 6 characters.",
+        err: "Password must be at least 8 characters.",
         success: "",
       });
     try {
@@ -114,10 +114,7 @@ const LoginScreen = ({ navigation }) => {
 };
 const styles = StyleSheet.create({
   container: {
-   
     flex: 1,
-   
-   
   },
   signupTextCont: {
     flexGrow: 1,

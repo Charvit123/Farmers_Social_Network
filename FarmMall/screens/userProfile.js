@@ -12,12 +12,6 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import hostname from "../const/hostname";
 import COLORS from "../const/colors";
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from "react-native-popup-menu";
 import Icon from "react-native-vector-icons/MaterialIcons";
 const userProfile = ({ navigation }) => {
   const [user, setUser] = useState({});
@@ -50,7 +44,6 @@ const userProfile = ({ navigation }) => {
 
   const Card = (diss) => {
     const onDelete = async () => {
-      console.log(diss.diss[1]._id);
       id = diss.diss[1]._id;
       const url = "http://" + hostname + ":5000/api/deletePost";
       const res = await fetch(url, {
