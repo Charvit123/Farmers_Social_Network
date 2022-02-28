@@ -62,8 +62,7 @@ const Weather = ({ navigation }) => {
   }
 
   const current = forecast.current.weather[0];
-  // TODO: In an upcoming blog post, I'll be extracting components out of this class as you would in a real application.
-  return (
+    return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         refreshControl={
