@@ -4,14 +4,15 @@ import {
   Text,
   View,
   TextInput ,
-  TouchableOpacity
+  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'apisauce';
 import hostname from "../const/hostname";
-
+import loginimg from "../images/bg4.jpg";
 const state = {
         username: "",
         email: "",
@@ -72,11 +73,21 @@ const RegisterScreen = ({navigation})=>{
 
 		return(
 			<View style={styles.container}>
+         <ImageBackground
+        source={loginimg}
+        style={{
+          flex: 1,
+          height:800,
+          width:410,
+          resizeMode: 'contain',
+          opacity:1,
+        }}
+      >
 				<Logo/>
           <TextInput style={styles.inputBox} 
                         underlineColorAndroid='rgba(0,0,0,0)' 
                         placeholder="Username"
-                        placeholderTextColor = "#ffffff" 
+                        placeholderTextColor = "#7A797A" 
                         onChangeText={(text) => onChangeHandler('username', text)}
                         value={username}
                     />
@@ -85,7 +96,7 @@ const RegisterScreen = ({navigation})=>{
                         name="email"
                         underlineColorAndroid='rgba(0,0,0,0)' 
                         placeholder="Email"
-                        placeholderTextColor = "#ffffff"
+                        placeholderTextColor = "#7A797A"
                         selectionColor="#fff"
                         keyboardType="email-address"
                         onChangeText={(text) => onChangeHandler('email', text)}
@@ -96,7 +107,7 @@ const RegisterScreen = ({navigation})=>{
                         underlineColorAndroid='rgba(0,0,0,0)' 
                         placeholder="Password"
                         secureTextEntry={true}
-                        placeholderTextColor = "#ffffff" 
+                        placeholderTextColor = "#7A797A" 
                         onChangeText={(text) => onChangeHandler('password', text)}
                         value={password}
                     />  
@@ -105,7 +116,7 @@ const RegisterScreen = ({navigation})=>{
                         underlineColorAndroid='rgba(0,0,0,0)' 
                         placeholder="ConfirmPassword"
                         secureTextEntry={true}
-                        placeholderTextColor = "#ffffff" 
+                        placeholderTextColor = "#7A797A" 
                         onChangeText={(text) => onChangeHandler('cpassword', text)}
                         value={cpassword}
                     />
@@ -120,16 +131,14 @@ const RegisterScreen = ({navigation})=>{
             <Text style={styles.signupButton}> Sign in</Text>
           </TouchableOpacity>
 				</View>
+        </ImageBackground>
 			</View>	
 			)
 }
 
 const styles = StyleSheet.create({
   container : {
-    backgroundColor:'#455a64',
     flex: 1,
-    alignItems:'center',
-    justifyContent :'center'
   },
   signupTextCont : {
   	flexGrow: 1,
@@ -139,7 +148,7 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   signupText: {
-  	color:'rgba(255,255,255,0.6)',
+  	color:'rgba(255,255,255,0.9)',
   	fontSize:16
   },
   signupButton: {
@@ -149,21 +158,23 @@ const styles = StyleSheet.create({
   },
    inputBox: {
     width:300,
-    backgroundColor:'rgba(255, 255,255,0.2)',
+    backgroundColor:'rgba(255, 255,255,0.9)',
     borderRadius: 25,
     paddingHorizontal:17,
     paddingTop:6,
     paddingBottom:6,
     fontSize:18,
-    color:'#ffffff',
+    color:'#7A797A',
     marginVertical: 12,
+    alignSelf:"center",
   },
   button: {
     width:300,
     backgroundColor:'#1c313a',
      borderRadius: 25,
       marginVertical: 10,
-      paddingVertical: 13
+      paddingVertical: 13,
+      alignSelf:"center",
   },
   buttonText: {
     fontSize:18,

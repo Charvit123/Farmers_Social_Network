@@ -12,7 +12,7 @@ import {
   RefreshControl,
   Alert,
   SafeAreaView,
-  BlurView
+  BlurView,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -72,7 +72,6 @@ const postPage = (disscussion) => {
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const [userData, setUserData] = useState(state);
-
 
   const { cmnt, err, success } = userData;
 
@@ -161,7 +160,7 @@ const postPage = (disscussion) => {
   };
   return (
     <SafeAreaView
-      style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
+      style={{ flex: 1, paddingHorizontal: 9, backgroundColor: COLORS.white }}
     >
       <View style={styles.container}>
         <ScrollView
@@ -171,9 +170,7 @@ const postPage = (disscussion) => {
           }
         >
           {/* post_part */}
-
-          <View style={styles.subcontainer}>
-            <View style={styles.userprofile}>
+          <View style={styles.userprofile}>
               <Image
                 style={styles.userimg}
                 source={{ uri: user.avatar }}
@@ -189,17 +186,19 @@ const postPage = (disscussion) => {
                 <Text>{user.email}</Text>
               </View>
             </View>
+          <View style={styles.subcontainer}>
+       
             <Text style={styles.title}>{info.title}</Text>
-            <View style={{ width: 300, height: 300, alignSelf: "center" }}>
+            <View style={{ width: 350, height: 300, alignSelf: "center" }}>
               <Image
                 source={{ uri: info.images[0] }}
-                style={{ width: "100%", height: 300, resizeMode: "contain" }}
+                style={{ width: "100%", height: 300, resizeMode: "contain" ,borderRadius:10, }}
               />
             </View>
             <Text
               style={{
                 alignSelf: "center",
-                padding: 5,
+               
                 marginLeft: 25,
                 marginRight: 25,
               }}
@@ -236,9 +235,7 @@ const postPage = (disscussion) => {
               />
             </View>
 
-            <View
-              style={{ marginVertical: 30, fontSize: 20 }}
-            >
+            <View style={{ marginVertical: 30, fontSize: 20 }}>
               <TouchableOpacity onPress={onSubmit} style={{ left: 110 }}>
                 <Text>submit</Text>
               </TouchableOpacity>
@@ -247,7 +244,7 @@ const postPage = (disscussion) => {
           <Icon name="add-comment" size={35} onPress={() => setVisible(true)} />
         </View>
       </View>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 };
 
@@ -259,14 +256,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontFamily: "lucida grande",
     marginTop: 30,
-    paddingHorizontal: 15,
+    paddingHorizontal: 0,
     backgroundColor: COLORS.white,
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    position: "relative"
+    position: "relative",
   },
   subcontainer: {
     // maxWidth: "100%",
@@ -285,19 +282,20 @@ const styles = StyleSheet.create({
     // marginRight: 20,
     // height: 300,
     marginTop: 5,
-    backgroundColor: COLORS.light,
+    backgroundColor: COLORS.white,
     width: "100%",
-    marginHorizontal: 2,
+   // marginHorizontal: 2,
     borderRadius: 10,
     marginBottom: 20,
-    padding: 15,
+    padding: 1,
     display: "flex",
     justifyContent: "space-around",
   },
   title: {
-    marginTop: 5,
-    fontSize: 25,
+    marginTop: 10,
+    fontSize: 20,
     alignSelf: "center",
+    fontWeight: "bold",
   },
   userimg: {
     height: 5,
@@ -307,10 +305,12 @@ const styles = StyleSheet.create({
   userprofile: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 30,
+    marginTop: 10,
+    marginLeft:40,
   },
   userdetails: {
-    marginLeft: 5,
+    marginLeft: 10,
+    
   },
   comment: {
     marginTop: 20,
