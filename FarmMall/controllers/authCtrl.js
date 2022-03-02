@@ -130,6 +130,41 @@ const authCtrl = {
         res.json({
             user
         });
+    },
+    follow: async (req, res) => {
+        const { id,currentUser } = req.body;
+        // const user = await Users.findOne(currentUser);
+
+            await Users.updateOne(
+            { _id: currentUser },
+            { $push: { following: id } });
+            await Users.updateOne(
+            { _id: id },
+            { $push: { follower: currentUser } });
+            res.json({
+                msg:"user started following",
+            }); 
+    },
+    following: async (req, res) => {
+        const { currentUser } = req.body;
+        const user = await Users.findOne({ _id:currentUser })
+        const retu=user.following
+        res.json({
+            retu,
+        });
+    },
+    unfollow: async (req, res) => {
+        const { id,currentUser } = req.body;
+        // const user = await Users.findOne(currentUser);
+            await Users.updateOne(
+            { _id: currentUser },
+            { $pull: { following: id } });
+            await Users.updateOne(
+            { _id: id },
+            { $pull: { follower: currentUser } });
+            res.json({
+                msg:"user has unfollowed",
+            });
     }
 };
 

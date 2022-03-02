@@ -22,7 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShowCmnt from "./ShowCmnt";
 import { NavigationEvents } from "react-navigation";
 import COLORS from "./../const/colors";
-
+import { useNavigation } from '@react-navigation/native';
 const state = {
   cmnt: "",
   err: "",
@@ -72,6 +72,9 @@ const postPage = (disscussion) => {
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const [userData, setUserData] = useState(state);
+
+  // const userN=info.user;
+  const navigation = useNavigation();
 
   const { cmnt, err, success } = userData;
 
@@ -158,6 +161,10 @@ const postPage = (disscussion) => {
       setRefreshing(false);
     }, 2000);
   };
+  // const otherUser=()=>{
+    
+  //   navigation.navigate("otherUser",userN);
+  // };
   return (
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 9, backgroundColor: COLORS.white }}
@@ -182,8 +189,10 @@ const postPage = (disscussion) => {
                 }}
               />
               <View style={styles.userdetails}>
-                <Text>{user.username}</Text>
-                <Text>{user.email}</Text>
+                <TouchableOpacity onPress={()=>{navigation.navigate("otherUser",id)}}>
+                  <Text>{user.username}</Text>
+                  <Text>{user.email}</Text>  
+                </TouchableOpacity>
               </View>
             </View>
           <View style={styles.subcontainer}>

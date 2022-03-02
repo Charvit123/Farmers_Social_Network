@@ -36,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
     if (!search) return;
 
     try {
-      const url = `http://192.168.11.30:5000/api/search?news=${search}`;
+      const url = "http://"+hostname+"api/search?news=${search}";
       const res = await fetch(url, {
         method: "GET",
         headers: {
@@ -132,7 +132,7 @@ const HomeScreen = ({ navigation }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate("Details", diss)}
+        onPress={() => navigation.push("Details",diss)}
       >
         <View style={style.card}>
           <View
