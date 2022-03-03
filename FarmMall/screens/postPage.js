@@ -4,15 +4,12 @@ import {
   View,
   Image,
   Modal,
-  Button,
   TouchableOpacity,
   Animated,
   TextInput,
   ScrollView,
   RefreshControl,
-  Alert,
   SafeAreaView,
-  BlurView,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -20,9 +17,8 @@ import hostname from "../const/hostname";
 import { isEmpty } from "./../utils/valid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShowCmnt from "./ShowCmnt";
-import { NavigationEvents } from "react-navigation";
 import COLORS from "./../const/colors";
-
+import { useNavigation } from "@react-navigation/native";
 const state = {
   cmnt: "",
   err: "",
@@ -72,6 +68,8 @@ const postPage = (disscussion) => {
   const [refreshing, setRefreshing] = useState(false);
   const [visible, setVisible] = useState(false);
   const [userData, setUserData] = useState(state);
+
+  const navigation = useNavigation();
 
   const { cmnt, err, success } = userData;
 
@@ -182,8 +180,14 @@ const postPage = (disscussion) => {
               }}
             />
             <View style={styles.userdetails}>
-              <Text>{user.username}</Text>
-              <Text>{user.email}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("otherUser", id);
+                }}
+              >
+                <Text>{user.username}</Text>
+                <Text>{user.email}</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.subcontainer}>
@@ -230,11 +234,9 @@ const postPage = (disscussion) => {
               </View>
             </View>
             <View style={{ alignItems: "center" }}>
-              <Text>Add Comment</Text>
+              <Text>Comment</Text>
               <TextInput
-                multiline={true}
-                numberOfLines={7}
-                placeholder="Put your thoughts"
+                placeholder="Put your thougts"
                 onChangeText={(text) => onChangeHandler("cmnt", text)}
                 value={cmnt}
                 name="cmnt"
@@ -242,8 +244,8 @@ const postPage = (disscussion) => {
             </View>
 
             <View style={{ marginVertical: 30, fontSize: 20 }}>
-              <TouchableOpacity onPress={onSubmit} style={{ left: 150 }}>
-                <Text>Submit</Text>
+              <TouchableOpacity onPress={onSubmit} style={{ left: 110 }}>
+                <Text>submit</Text>
               </TouchableOpacity>
             </View>
           </ModalPoup>
@@ -272,25 +274,9 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   subcontainer: {
-    // maxWidth: "100%",
-    // maxHeight: "100%",
-    // borderColor: "black",
-    // overflow: "hidden",
-    // shadowColor: "black",
-    // shadowRadius: 10,
-    // shadowOpacity: 1,
-    // elevation: 5,
-    // paddingTop: 20,
-    // paddingBottom: 20,
-    // paddingLeft: 20,
-    // paddingRight: 20,
-    // marginLeft: 20,
-    // marginRight: 20,
-    // height: 300,
     marginTop: 5,
     backgroundColor: COLORS.white,
     width: "100%",
-    // marginHorizontal: 2,
     borderRadius: 10,
     marginBottom: 20,
     padding: 1,
@@ -323,7 +309,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: "80%",
     backgroundColor: "white",
-    // modalBackGround: "blur",
     paddingHorizontal: 20,
     paddingVertical: 30,
     marginLeft: 40,

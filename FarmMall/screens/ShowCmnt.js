@@ -1,16 +1,9 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-
-} from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import hostname from "../const/hostname";
 import COLORS from "./../const/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Directions } from "react-native-gesture-handler";
 
 const ShowCmnt = (passedComments) => {
   const [cmntUser, setCmntuser] = useState("");
@@ -27,10 +20,10 @@ const ShowCmnt = (passedComments) => {
       },
     });
     const jsonRes2 = await res2.json();
-    setCmntuser(jsonRes2.user)
+    setCmntuser(jsonRes2.user);
   }, []);
   const cmntDelete = async () => {
-    alert("Do you want to delete cmnt??")
+    alert("Do you want to delete cmnt??");
     const id = passedComments.passedComments[1]._id;
     const url = "http://" + hostname + ":5000/api/deleteCmnt";
     const res = await fetch(url, {
@@ -40,9 +33,8 @@ const ShowCmnt = (passedComments) => {
         "Content-Type": "application/json",
       },
     });
-  }
+  };
   return (
-
     <View style={styles.container}>
       <View style={styles.userprofile}>
         <Image
@@ -57,36 +49,44 @@ const ShowCmnt = (passedComments) => {
         />
 
         <View style={styles.userdetails}>
-          <Text style={{ marginLeft: 10, }}>{cmntUser.username}</Text>
-          {/* <Text>{cmntUser.email}</Text> */}
+          <Text style={{ marginLeft: 10 }}>{cmntUser.username}</Text>
         </View>
-
       </View>
       <View style={styles.comtcont}>
-        <Text style={{ marginTop: 10, }}>{passedComments.passedComments[1].cmnt}</Text>
-        {(id == loggedinUser) &&
-          <Icon name="delete" size={20} onPress={cmntDelete} style={styles.icon}></Icon>
-        }
+        <Text style={{ marginTop: 10 }}>
+          {passedComments.passedComments[1].cmnt}
+        </Text>
+        {id == loggedinUser && (
+          <Icon
+            name="delete"
+            size={20}
+            onPress={cmntDelete}
+            style={styles.icon}
+          ></Icon>
+        )}
       </View>
-
     </View>
-
-
   );
 };
 export default ShowCmnt;
 
 const styles = StyleSheet.create({
   container: {
-    height: 100,
-    backgroundColor: COLORS.light,
-    width: "100%",
+  
+    backgroundColor: COLORS.white,
+    width: "98%",
     marginHorizontal: 2,
     borderRadius: 10,
     marginBottom: 10,
     padding: 15,
     display: "flex",
     justifyContent: "space-around",
+   alignSelf:"center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   userimg: {
     height: 5,
@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
   },
   userprofile: {
     flexDirection: "row",
-
   },
   userdetails: {
     flexDirection: "column",
@@ -109,7 +108,6 @@ const styles = StyleSheet.create({
   comtcont: {
     display: "flex",
     flexDirection: "column",
-    marginTop: 15,
-
-  }
+    marginTop: 5,
+  },
 });

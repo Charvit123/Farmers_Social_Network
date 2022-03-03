@@ -8,52 +8,31 @@ import {
   SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import hostname from "../const/hostname";
 import COLORS from "../const/colors";
-import Icon from "react-native-vector-icons/MaterialIcons";
-const userProfile = ({ navigation }) => {
-  const [user, setUser] = useState({});
-  const [diss, setPost] = useState({});
+import { useNavigation } from '@react-navigation/native';
+
+const  ShowPosts = (id) => {
+    const [diss, setPost] = useState({});
+    const navigation = useNavigation();
+
+    const takePost=async(userIds)=>{
+        const id=userIds.userIds[1]
+        const url2 = "http://" + hostname + ":5000/api/userPost";
+        const res2 = await fetch(url2, {
+            method: "POST",
+            body: JSON.stringify({ id }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const jsonRes2 = await res2.json();
+        setPost(jsonRes2.getUsersPost);
+    }
   useEffect(async () => {
-    const id = await AsyncStorage.getItem("id");
-
-    const url = "http://" + hostname + ":5000/api/finduser";
-    const res = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({ id }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const jsonRes = await res.json();
-    setUser(jsonRes.user);
-
-    const url2 = "http://" + hostname + ":5000/api/userPost";
-    const res2 = await fetch(url2, {
-      method: "POST",
-      body: JSON.stringify({ id }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const jsonRes1 = await res2.json();
-    setPost(jsonRes1.getUsersPost);
+        await takePost(id);
   }, []);
-
-  const Card = (diss) => {
-    const onDelete = async () => {
-      id = diss.diss[1]._id;
-      const url = "http://" + hostname + ":5000/api/deletePost";
-      const res = await fetch(url, {
-        method: "POST",
-        body: JSON.stringify({ id }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      navigation.navigate("Home");
-    };
+   const Card = (diss) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -94,41 +73,15 @@ const userProfile = ({ navigation }) => {
                 {diss.diss[1].description}
               </Text>
             </View>
-            <Icon
-                name="delete"
-                onPress={onDelete}
-                size={20}
-                style={{ alignSelf: "center", color: "black"  , marginTop:5,}}
-              ></Icon>
           </View>
         </View>
       </TouchableOpacity>
     );
   };
-
   return (
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
     >
-      <View style={style.userprofile}>
-        <Image
-          style={style.userimg}
-          source={{ uri: user.avatar }}
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 100,
-            resizeMode: "contain",
-            marginLeft:60,
-          }}
-        />
-
-        <View style={style.userdetails}>
-          <Text style={{ marginLeft:50, }}>{user.username}</Text>
-          <Text style={{ marginLeft:5,}}>{user.email}</Text>
-        </View>
-      </View>
-
       <ScrollView showsVerticalScrollIndicator={false}>
         {diss &&
           Object.entries(diss).map((item, i) => {
@@ -138,7 +91,7 @@ const userProfile = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-export default userProfile;
+
 const style = StyleSheet.create({
   container: {
     height: 200,
@@ -187,3 +140,4 @@ const style = StyleSheet.create({
    alignSelf:"center",
   },
 });
+export default ShowPosts

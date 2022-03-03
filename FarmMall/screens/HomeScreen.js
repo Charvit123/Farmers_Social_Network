@@ -4,28 +4,26 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Dimensions,
   Image,
   SafeAreaView,
   ScrollView,
   RefreshControl,
-  ImageBackground,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import React, { useEffect, useState } from "react";
-import { create } from "apisauce";
 import COLORS from "./../const/colors";
 import hostname from "../const/hostname";
 import Weather from "./Weather";
+import FollowingPosts from "./followingPosts";
 const state = {
   search: "",
 };
 const HomeScreen = ({ navigation }) => {
   const [discussions, setDiscussions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [followingPost, setfollowingPost] = useState(false);
   const [weather, setweather] = useState(false);
-
+  
   const [search, setSearch] = useState("");
   const onChangeHandler = (e) => {
     setSearch(e.replace(/ /g, ""));
@@ -36,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
     if (!search) return;
 
     try {
-      const url = `http://192.168.11.30:5000/api/search?news=${search}`;
+      const url = `http://`+ hostname +`:5000/api/search?posts=${search}`;
       const res = await fetch(url, {
         method: "GET",
         headers: {
@@ -44,10 +42,10 @@ const HomeScreen = ({ navigation }) => {
         },
       });
       const jsonRes = await res.json();
-      // console.log(jsonRes);
       setDiscussions(jsonRes.posts);
       navigation.navigate("Home");
-    } catch (err) {
+    } 
+    catch (err) {
       console.log(err);
     }
   };
@@ -69,7 +67,6 @@ const HomeScreen = ({ navigation }) => {
       });
   };
   useEffect(async () => {
-    // console.log("1");
     await takePost();
   }, []);
   const addQues = async () => {
@@ -100,7 +97,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const [catergoryIndex, setCategoryIndex] = React.useState(0);
 
-  const categories = ["ALL POSTS", "POPULAR", "WEATHER"];
+  const categories = ["FEEDS", "POSTS", "WEATHER"];
 
   const CategoryList = () => {
     return (
@@ -109,10 +106,10 @@ const HomeScreen = ({ navigation }) => {
           <TouchableOpacity
             key={index}
             activeOpacity={0.8}
-            // onPress={() => setCategoryIndex(index)}
             onPress={() => {
               setCategoryIndex(index);
               index === 2? setweather(true) : setweather(false) ;
+              index === 1? setfollowingPost(true) : setfollowingPost(false) ;
             }}
           >
             <Text
@@ -132,7 +129,7 @@ const HomeScreen = ({ navigation }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate("Details", diss)}
+        onPress={() => navigation.push("Details",diss)}
       >
         <View style={style.card}>
           <View
@@ -220,7 +217,6 @@ const HomeScreen = ({ navigation }) => {
           <TextInput
             placeholder="Search"
             style={style.input}
-            //  onChange={e => setSearch(e.target.value.replace(/ /g, ''))}
             onChangeText={(text) => onChangeHandler(text)}
           />
         </View>
@@ -234,7 +230,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
       <CategoryList />
-      {!weather &&
+      {!weather && !followingPost && 
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -244,6 +240,20 @@ const HomeScreen = ({ navigation }) => {
           Object.entries(discussions).map((item, i) => {
             return <Card diss={item} key={i} />;
           })}
+        {!discussions &&
+          <View>
+            <Text>No Posts</Text>
+          </View>
+          }
+      </ScrollView>
+      }
+      {!weather && followingPost && 
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+          <FollowingPosts/>
       </ScrollView>
       }
       {weather &&

@@ -12,8 +12,6 @@ import {
   RefreshControl,
 } from "react-native";
 import * as Location from "expo-location";
-import COLORS from "./../const/colors";
-// import { openWeatherKey } from './Secrets';
 const openWeatherKey = `ab70d946be8168cdeb0787e057c6b21d`;
 let url = `https://api.openweathermap.org/data/2.5/onecall?&units=metric&exclude=minutely&appid=${openWeatherKey}`;
 
@@ -62,7 +60,7 @@ const Weather = ({ navigation }) => {
   }
 
   const current = forecast.current.weather[0];
-    return (
+  return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         refreshControl={
@@ -85,10 +83,9 @@ const Weather = ({ navigation }) => {
           <Text style={styles.currentTemp}>
             {Math.round(forecast.current.temp)}°C
           </Text>
-        
         </View>
         <Text style={styles.currentDescription}>{current.description}</Text>
-       
+
         <View>
           <Text style={styles.subtitle}>Hourly Forecast</Text>
           <FlatList
@@ -153,11 +150,11 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     marginLeft: 4,
     color: "#e96e50",
-    alignSelf:"center",
+    alignSelf: "center",
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "flex-start",
   },
@@ -170,6 +167,7 @@ const styles = StyleSheet.create({
   current: {
     height: 250,
     backgroundColor: "#DCE0DF",
+
     width: "90%",
     marginHorizontal: 2,
     borderRadius: 40,
@@ -180,6 +178,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   currentTemp: {
     fontSize: 32,
@@ -195,20 +198,21 @@ const styles = StyleSheet.create({
   },
   hour: {
     backgroundColor: "#DCE0DF",
-    borderRadius:10,
-    padding: 6,
-    marginLeft:4,
-    marginRight:4,
+    borderRadius: 10,
+    padding: 10,
+    marginLeft: 5,
+    marginRight: 5,
     alignItems: "center",
+  
   },
   day: {
     backgroundColor: "#DCE0DF",
-    borderRadius:10,
+    borderRadius: 10,
     padding: 6,
-    width:"90%",
+    width: "90%",
     flexDirection: "row",
     justifyContent: "center",
-    alignSelf:"center",
+    alignSelf: "center",
     marginBottom: 7,
   },
   dayDetails: {

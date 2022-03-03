@@ -1,2 +1,2 @@
-let hostname = '192.168.11.30'
+let hostname = '192.168.29.71'
 export default hostname;

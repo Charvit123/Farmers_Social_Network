@@ -35,35 +35,40 @@ const dissCtrl = {
         msg: "Details showed Successfully :)",
         getDiscussions,
       });
-    } catch (error) { }
+    } catch (error) {}
   },
   usersPost: async (req, res) => {
-    const getUsersPost = await disscussSchema.find({ user: req.body.id }).sort("-createdAt");
+    const getUsersPost = await disscussSchema
+      .find({ user: req.body.id })
+      .sort("-createdAt");
     res.json({
       msg: "usersPost",
       getUsersPost,
-    })
+    });
   },
   deletePost: async (req, res) => {
     try {
       const post = await disscussSchema.findByIdAndDelete({ _id: req.body.id });
-      const cmnt = await Comments.find({ postId: req.body.id }).deleteMany({ postId: req.body.id })
+      const cmnt = await Comments.find({ postId: req.body.id }).deleteMany({
+        postId: req.body.id,
+      });
 
       res.json({
-        msg: 'Post Removed',
-      })
-    }
-    catch (err) {
+        msg: "Post Removed",
+      });
+    } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
   },
   search: async (req, res) => {
-        try {
-            const posts = await disscussSchema.find({title: {$regex: req.query.news}});
-            res.json({posts});
-        } catch (err) {
-            return res.status(500).json({msg: err.message});
-        }
+    try {
+      const posts = await disscussSchema.find({
+        title: { $regex: req.query.posts },
+      });
+      res.json({ posts });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
   },
   addComment: async (req, res) => {
     try {
@@ -109,14 +114,13 @@ const dissCtrl = {
   },
   deleteCmnt: async (req, res) => {
     try {
-      const cmnt = await Comments.findOneAndDelete({ _id: req.body.id })
+      const cmnt = await Comments.findOneAndDelete({ _id: req.body.id });
       res.json({
-        msg: 'Cmnt Removed',
-      })
-    }
-    catch (err) {
+        msg: "Cmnt Removed",
+      });
+    } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
-  }
+  },
 };
 module.exports = dissCtrl;

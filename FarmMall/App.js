@@ -11,6 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import userProfile from "./screens/userProfile";
 import { MenuProvider } from 'react-native-popup-menu';
 import Weather from "./screens/Weather";
+import otherUser from "./screens/otherUser";
+import followingPosts from "./screens/followingPosts";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -24,7 +26,9 @@ export default function App() {
           <Stack.Screen name="AddQues" component={AddQues} />
           <Stack.Screen name="Details" component={postPage} />
           <Stack.Screen name="UserProfile" component={userProfile} />
+          <Stack.Screen name="otherUser" component={otherUser} />
           <Stack.Screen name="Weather" component={Weather} />
+          <Stack.Screen name="followingPosts" component={followingPosts} />
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>
