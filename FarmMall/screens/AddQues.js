@@ -47,7 +47,6 @@ const AddQues = ({ navigation }) => {
 
     if (!pick.cancelled) {
       setImg(pick);
-      // console.log(pick);
     }
   };
   const onSubmit = async () => {
@@ -84,7 +83,6 @@ const AddQues = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.Title}>TITLE</Text> */}
       <TextInput
         style={styles.inputBox}
         placeholder="Title"
@@ -92,7 +90,6 @@ const AddQues = ({ navigation }) => {
         value={title}
         name="title"
       />
-      {/* <Text style={styles.Title}>DESCRIPTION</Text> */}
       <TextInput
         multiline={true}
         numberOfLines={4}
@@ -105,18 +102,6 @@ const AddQues = ({ navigation }) => {
       {img && (
         <Image source={{ uri: img.uri }} style={{ width: 100, height: 100 }} />
       )}
-      {/* <Button title="take image" onPress={takeimage} />
-       <AntDesign name="camera" size={40} color="black" /> */}
-      {/* 
-      <TouchableOpacity style={styles.chooseimg} onPress={takeimage}>
-        <AntDesign
-          name="camera"
-          style={styles.chooseimg}
-          size={30}
-          color="black"
-        />
-        
-      </TouchableOpacity> */}
       <Icon name="image" size={35} onPress={takeimage} />
       <Text>Upload Image</Text>
       <TouchableOpacity style={styles.Button} onPress={onSubmit}>

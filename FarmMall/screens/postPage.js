@@ -4,15 +4,12 @@ import {
   View,
   Image,
   Modal,
-  Button,
   TouchableOpacity,
   Animated,
   TextInput,
   ScrollView,
   RefreshControl,
-  Alert,
   SafeAreaView,
-  BlurView,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -20,7 +17,6 @@ import hostname from "../const/hostname";
 import { isEmpty } from "./../utils/valid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShowCmnt from "./ShowCmnt";
-import { NavigationEvents } from "react-navigation";
 import COLORS from "./../const/colors";
 import { useNavigation } from '@react-navigation/native';
 const state = {
@@ -73,7 +69,6 @@ const postPage = (disscussion) => {
   const [visible, setVisible] = useState(false);
   const [userData, setUserData] = useState(state);
 
-  // const userN=info.user;
   const navigation = useNavigation();
 
   const { cmnt, err, success } = userData;
@@ -161,10 +156,6 @@ const postPage = (disscussion) => {
       setRefreshing(false);
     }, 2000);
   };
-  // const otherUser=()=>{
-    
-  //   navigation.navigate("otherUser",userN);
-  // };
   return (
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 9, backgroundColor: COLORS.white }}
@@ -275,25 +266,9 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   subcontainer: {
-    // maxWidth: "100%",
-    // maxHeight: "100%",
-    // borderColor: "black",
-    // overflow: "hidden",
-    // shadowColor: "black",
-    // shadowRadius: 10,
-    // shadowOpacity: 1,
-    // elevation: 5,
-    // paddingTop: 20,
-    // paddingBottom: 20,
-    // paddingLeft: 20,
-    // paddingRight: 20,
-    // marginLeft: 20,
-    // marginRight: 20,
-    // height: 300,
     marginTop: 5,
     backgroundColor: COLORS.white,
     width: "100%",
-   // marginHorizontal: 2,
     borderRadius: 10,
     marginBottom: 20,
     padding: 1,
@@ -327,7 +302,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: "80%",
     backgroundColor: "white",
-    // modalBackGround: "blur",
     paddingHorizontal: 20,
     paddingVertical: 30,
     marginLeft: 40,

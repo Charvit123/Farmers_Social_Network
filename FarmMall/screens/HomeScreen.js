@@ -4,17 +4,13 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Dimensions,
   Image,
   SafeAreaView,
   ScrollView,
   RefreshControl,
-  ImageBackground,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import React, { useEffect, useState } from "react";
-import { create } from "apisauce";
 import COLORS from "./../const/colors";
 import hostname from "../const/hostname";
 import Weather from "./Weather";
@@ -25,7 +21,7 @@ const HomeScreen = ({ navigation }) => {
   const [discussions, setDiscussions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [weather, setweather] = useState(false);
-
+  
   const [search, setSearch] = useState("");
   const onChangeHandler = (e) => {
     setSearch(e.replace(/ /g, ""));
@@ -44,7 +40,6 @@ const HomeScreen = ({ navigation }) => {
         },
       });
       const jsonRes = await res.json();
-      // console.log(jsonRes);
       setDiscussions(jsonRes.posts);
       navigation.navigate("Home");
     } catch (err) {
@@ -69,7 +64,6 @@ const HomeScreen = ({ navigation }) => {
       });
   };
   useEffect(async () => {
-    // console.log("1");
     await takePost();
   }, []);
   const addQues = async () => {
@@ -100,7 +94,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const [catergoryIndex, setCategoryIndex] = React.useState(0);
 
-  const categories = ["ALL POSTS", "POPULAR", "WEATHER"];
+  const categories = ["POSTS", "FEEDS", "WEATHER"];
 
   const CategoryList = () => {
     return (
@@ -109,10 +103,10 @@ const HomeScreen = ({ navigation }) => {
           <TouchableOpacity
             key={index}
             activeOpacity={0.8}
-            // onPress={() => setCategoryIndex(index)}
             onPress={() => {
               setCategoryIndex(index);
               index === 2? setweather(true) : setweather(false) ;
+              index === 1? setfollowingPost(true) : setfollowingPost(false) ;
             }}
           >
             <Text
@@ -192,7 +186,7 @@ const HomeScreen = ({ navigation }) => {
               fontWeight: "bold",
               paddingHorizontal: 7,
             }}
-            onPress={() => navigation.push("Home")}
+            onPress={() => navigation.push("followingPosts",)}
           >
             Farm Discuss
           </Text>
@@ -220,7 +214,6 @@ const HomeScreen = ({ navigation }) => {
           <TextInput
             placeholder="Search"
             style={style.input}
-            //  onChange={e => setSearch(e.target.value.replace(/ /g, ''))}
             onChangeText={(text) => onChangeHandler(text)}
           />
         </View>

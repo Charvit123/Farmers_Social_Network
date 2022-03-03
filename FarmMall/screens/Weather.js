@@ -12,8 +12,6 @@ import {
   RefreshControl,
 } from "react-native";
 import * as Location from "expo-location";
-import COLORS from "./../const/colors";
-// import { openWeatherKey } from './Secrets';
 const openWeatherKey = `ab70d946be8168cdeb0787e057c6b21d`;
 let url = `https://api.openweathermap.org/data/2.5/onecall?&units=metric&exclude=minutely&appid=${openWeatherKey}`;
 

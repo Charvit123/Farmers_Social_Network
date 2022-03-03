@@ -41,6 +41,7 @@ const otherUser = ({route,navigation}) => {
     for(var i=0;i<jsonRes1.retu.length;i++){
         if(jsonRes1.retu[i]==id){
             setFollowing(true);
+            break;
         }
         else{
             setFollowing(false)
@@ -195,10 +196,6 @@ const otherUser = ({route,navigation}) => {
     </SafeAreaView>
   );
 };
-    // return (
-    //     <Text>{route.params}</Text>
-    // )
-// };
 export default otherUser
 const style = StyleSheet.create({
   container: {

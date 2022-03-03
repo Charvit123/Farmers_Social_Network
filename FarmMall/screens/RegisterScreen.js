@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,6 @@ import {
 import { isEmpty, isEmail, isLength, isMatch } from './../utils/valid';
 import Logo from '../components/Logo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { create } from 'apisauce';
 import hostname from "../const/hostname";
 import loginimg from "../images/bg4.jpg";
 const state = {

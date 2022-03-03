@@ -1,14 +1,13 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  Image,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { isEmpty, isEmail, isLength, isMatch } from "./../utils/valid";
+import { isEmpty, isEmail, isLength } from "./../utils/valid";
 import Logo from "../components/Logo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import hostname from "../const/hostname";

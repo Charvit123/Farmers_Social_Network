@@ -10,7 +10,6 @@ import hostname from "../const/hostname";
 import COLORS from "./../const/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Directions } from "react-native-gesture-handler";
 
 const ShowCmnt = (passedComments) => {
   const [cmntUser, setCmntuser] = useState("");
@@ -58,7 +57,6 @@ const ShowCmnt = (passedComments) => {
 
         <View style={styles.userdetails}>
           <Text style={{ marginLeft: 10, }}>{cmntUser.username}</Text>
-          {/* <Text>{cmntUser.email}</Text> */}
         </View>
 
       </View>
