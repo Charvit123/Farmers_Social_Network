@@ -18,7 +18,7 @@ import { isEmpty } from "./../utils/valid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ShowCmnt from "./ShowCmnt";
 import COLORS from "./../const/colors";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 const state = {
   cmnt: "",
   err: "",
@@ -169,36 +169,44 @@ const postPage = (disscussion) => {
         >
           {/* post_part */}
           <View style={styles.userprofile}>
-              <Image
-                style={styles.userimg}
-                source={{ uri: user.avatar }}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 100,
-                  resizeMode: "contain",
+            <Image
+              style={styles.userimg}
+              source={{ uri: user.avatar }}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 100,
+                resizeMode: "contain",
+              }}
+            />
+            <View style={styles.userdetails}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("otherUser", id);
                 }}
-              />
-              <View style={styles.userdetails}>
-                <TouchableOpacity onPress={()=>{navigation.navigate("otherUser",id)}}>
-                  <Text>{user.username}</Text>
-                  <Text>{user.email}</Text>  
-                </TouchableOpacity>
-              </View>
+              >
+                <Text>{user.username}</Text>
+                <Text>{user.email}</Text>
+              </TouchableOpacity>
             </View>
+          </View>
           <View style={styles.subcontainer}>
-       
             <Text style={styles.title}>{info.title}</Text>
             <View style={{ width: 350, height: 300, alignSelf: "center" }}>
               <Image
                 source={{ uri: info.images[0] }}
-                style={{ width: "100%", height: 300, resizeMode: "contain" ,borderRadius:10, }}
+                style={{
+                  width: "100%",
+                  height: 300,
+                  resizeMode: "contain",
+                  borderRadius: 10,
+                }}
               />
             </View>
             <Text
               style={{
                 alignSelf: "center",
-               
+
                 marginLeft: 25,
                 marginRight: 25,
               }}
@@ -290,11 +298,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     marginTop: 10,
-    marginLeft:40,
+    marginLeft: 40,
   },
   userdetails: {
     marginLeft: 10,
-    
   },
   comment: {
     marginTop: 20,

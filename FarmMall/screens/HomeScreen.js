@@ -14,12 +14,14 @@ import React, { useEffect, useState } from "react";
 import COLORS from "./../const/colors";
 import hostname from "../const/hostname";
 import Weather from "./Weather";
+import FollowingPosts from "./followingPosts";
 const state = {
   search: "",
 };
 const HomeScreen = ({ navigation }) => {
   const [discussions, setDiscussions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [followingPost, setfollowingPost] = useState(false);
   const [weather, setweather] = useState(false);
   
   const [search, setSearch] = useState("");
@@ -32,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
     if (!search) return;
 
     try {
-      const url = "http://"+hostname+"api/search?news=${search}";
+      const url = `http://`+ hostname +`:5000/api/search?posts=${search}`;
       const res = await fetch(url, {
         method: "GET",
         headers: {
@@ -42,7 +44,8 @@ const HomeScreen = ({ navigation }) => {
       const jsonRes = await res.json();
       setDiscussions(jsonRes.posts);
       navigation.navigate("Home");
-    } catch (err) {
+    } 
+    catch (err) {
       console.log(err);
     }
   };
@@ -94,7 +97,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const [catergoryIndex, setCategoryIndex] = React.useState(0);
 
-  const categories = ["POSTS", "FEEDS", "WEATHER"];
+  const categories = ["FEEDS", "POSTS", "WEATHER"];
 
   const CategoryList = () => {
     return (
@@ -186,7 +189,7 @@ const HomeScreen = ({ navigation }) => {
               fontWeight: "bold",
               paddingHorizontal: 7,
             }}
-            onPress={() => navigation.push("followingPosts",)}
+            onPress={() => navigation.push("Home")}
           >
             Farm Discuss
           </Text>
@@ -227,7 +230,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
       <CategoryList />
-      {!weather &&
+      {!weather && !followingPost && 
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -237,6 +240,20 @@ const HomeScreen = ({ navigation }) => {
           Object.entries(discussions).map((item, i) => {
             return <Card diss={item} key={i} />;
           })}
+        {!discussions &&
+          <View>
+            <Text>No Posts</Text>
+          </View>
+          }
+      </ScrollView>
+      }
+      {!weather && followingPost && 
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+          <FollowingPosts/>
       </ScrollView>
       }
       {weather &&

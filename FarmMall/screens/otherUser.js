@@ -13,18 +13,17 @@ import hostname from "../const/hostname";
 import COLORS from "../const/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const otherUser = ({ route, navigation }) => {
+  const [user, setUser] = useState({});
+  const [diss, setPost] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
 
-const otherUser = ({route,navigation}) => {
-    
-    const [user, setUser] = useState({});
-    const [diss, setPost] = useState({});
-    const [refreshing, setRefreshing] = useState(false);
+  const [following, setFollowing] = useState();
+  const [notfollowing, setnotFollowing] = useState();
+  const id = route.params;
 
-    const [following, setFollowing] = useState();
-    const id=route.params;
-    
-    const checkFollowing=async()=>{
-        const currentUser=await AsyncStorage.getItem("id");    
+  const checkFollowing = async () => {
+    const currentUser = await AsyncStorage.getItem("id");
 
     const url1 = "http://" + hostname + ":5000/api/following";
     const res1 = await fetch(url1, {
@@ -35,20 +34,20 @@ const otherUser = ({route,navigation}) => {
       },
     });
     const jsonRes1 = await res1.json();
-    if(jsonRes1.retu.length==0){
+    if (jsonRes1.retu.length == 0) {
+      setFollowing(false);
+    }
+    for (var i = 0; i < jsonRes1.retu.length; i++) {
+      if (jsonRes1.retu[i] == id) {
+        setFollowing(true);
+        break;
+      } else {
         setFollowing(false);
+      }
     }
-    for(var i=0;i<jsonRes1.retu.length;i++){
-        if(jsonRes1.retu[i]==id){
-            setFollowing(true);
-            break;
-        }
-        else{
-            setFollowing(false)
-        }
-    }
-};
-    useEffect(async () => {
+  };
+  useEffect(async () => {
+    const currentUser = await AsyncStorage.getItem("id");
     const url = "http://" + hostname + ":5000/api/finduser";
     const res = await fetch(url, {
       method: "POST",
@@ -58,6 +57,9 @@ const otherUser = ({route,navigation}) => {
       },
     });
     const jsonRes = await res.json();
+    if (jsonRes.user._id === currentUser) {
+      setnotFollowing(true);
+    }
     setUser(jsonRes.user);
 
     const url2 = "http://" + hostname + ":5000/api/userPost";
@@ -74,31 +76,31 @@ const otherUser = ({route,navigation}) => {
     await checkFollowing();
   }, []);
 
-  const follow=async()=>{
-    const currentUser=await AsyncStorage.getItem("id");
+  const follow = async () => {
+    const currentUser = await AsyncStorage.getItem("id");
     const url3 = "http://" + hostname + ":5000/api/follow";
     const res3 = await fetch(url3, {
       method: "POST",
-      body: JSON.stringify({ id,currentUser}),
+      body: JSON.stringify({ id, currentUser }),
       headers: {
         "Content-Type": "application/json",
       },
     });
     const jsonRes1 = await res3.json();
-  }
-  const unfollow=async()=>{
-    const currentUser=await AsyncStorage.getItem("id");
+  };
+  const unfollow = async () => {
+    const currentUser = await AsyncStorage.getItem("id");
     const url3 = "http://" + hostname + ":5000/api/unfollow";
     const res3 = await fetch(url3, {
       method: "POST",
-      body: JSON.stringify({ id,currentUser}),
+      body: JSON.stringify({ id, currentUser }),
       headers: {
         "Content-Type": "application/json",
       },
     });
     const jsonRes1 = await res3.json();
-  }
-    const onRefresh = () => {
+  };
+  const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
       checkFollowing();
@@ -127,12 +129,10 @@ const otherUser = ({route,navigation}) => {
                 width: "100%",
                 borderRadius: 10,
               }}
-          />
-         
-           
+            />
           </View>
           <View style={style.cardInfo}>
-            <Text style={{ fontWeight: "bold", fontSize: 15 , }}>
+            <Text style={{ fontWeight: "bold", fontSize: 15 }}>
               {diss.diss[1].title}
             </Text>
             <View
@@ -156,47 +156,58 @@ const otherUser = ({route,navigation}) => {
     <SafeAreaView
       style={{ flex: 1, paddingHorizontal: 15, backgroundColor: COLORS.white }}
     >
-    <ScrollView
-     refreshControl={
+      <ScrollView
+        refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-      <View style={style.userprofile}>
-        <Image
-          style={style.userimg}
-          source={{ uri: user.avatar }}
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 100,
-            resizeMode: "contain",
-            marginLeft:60,
-          }}
-        />
+        }
+      >
+        <View style={style.userprofile}>
+          <Image
+            style={style.userimg}
+            source={{ uri: user.avatar }}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 100,
+              resizeMode: "contain",
+              alignSelf: "center",
+            }}
+          />
 
-        <View style={style.userdetails}>
-          <Text style={{ marginLeft:50, }}>{user.username}</Text>
-          <Text style={{ marginLeft:5,}}>{user.email}</Text>
+          <View style={style.userdetails}>
+            <Text style={{ alignSelf: "center" }}>{user.username}</Text>
+            <Text style={{ alignSelf: "center" }}>{user.email}</Text>
+          </View>
         </View>
-      </View>
-      {following && <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={unfollow}
-      ><Text>Following</Text></TouchableOpacity>}
-      {!following && <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={follow}
-      ><Text>Follow</Text></TouchableOpacity>}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {diss &&
-          Object.entries(diss).map((item, i) => {
-            return <Card diss={item} key={i} />;
-          })}
-      </ScrollView>
+        {following && !notfollowing && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={unfollow}
+            style={style.button}
+          >
+            <Text style={style.follow}>Following</Text>
+          </TouchableOpacity>
+        )}
+        {!following && !notfollowing && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={follow}
+            style={style.button}
+          >
+            <Text style={style.follow}>Follow</Text>
+          </TouchableOpacity>
+        )}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {diss &&
+            Object.entries(diss).map((item, i) => {
+              return <Card diss={item} key={i} />;
+            })}
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
 };
-export default otherUser
+export default otherUser;
 const style = StyleSheet.create({
   container: {
     height: 200,
@@ -228,7 +239,7 @@ const style = StyleSheet.create({
     height: 10,
     width: 10,
     borderRadius: 50,
-    alignSelf:"center",
+    alignSelf: "center",
   },
   userprofile: {
     display: "flex",
@@ -236,12 +247,24 @@ const style = StyleSheet.create({
     marginVertical: 10,
     alignContent: "center",
     alignSelf: "center",
-   
   },
   userdetails: {
-    display:"flex",
+    display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-   alignSelf:"center",
+    alignSelf: "center",
+  },
+
+  follow: {
+    alignSelf: "center",
+    color: "#ffffff",
+  },
+  button: {
+    width: 300,
+    backgroundColor: "#3184ad",
+    borderRadius: 25,
+    marginVertical: 10,
+    paddingVertical: 13,
+    alignSelf: "center",
   },
 });
