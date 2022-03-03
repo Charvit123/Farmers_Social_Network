@@ -171,34 +171,38 @@ const postPage = (disscussion) => {
         >
           {/* post_part */}
           <View style={styles.userprofile}>
-              <Image
-                style={styles.userimg}
-                source={{ uri: user.avatar }}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 100,
-                  resizeMode: "contain",
-                }}
-              />
-              <View style={styles.userdetails}>
-                <Text>{user.username}</Text>
-                <Text>{user.email}</Text>
-              </View>
+            <Image
+              style={styles.userimg}
+              source={{ uri: user.avatar }}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 100,
+                resizeMode: "contain",
+              }}
+            />
+            <View style={styles.userdetails}>
+              <Text>{user.username}</Text>
+              <Text>{user.email}</Text>
             </View>
+          </View>
           <View style={styles.subcontainer}>
-       
             <Text style={styles.title}>{info.title}</Text>
             <View style={{ width: 350, height: 300, alignSelf: "center" }}>
               <Image
                 source={{ uri: info.images[0] }}
-                style={{ width: "100%", height: 300, resizeMode: "contain" ,borderRadius:10, }}
+                style={{
+                  width: "100%",
+                  height: 300,
+                  resizeMode: "contain",
+                  borderRadius: 10,
+                }}
               />
             </View>
             <Text
               style={{
                 alignSelf: "center",
-               
+
                 marginLeft: 25,
                 marginRight: 25,
               }}
@@ -226,9 +230,11 @@ const postPage = (disscussion) => {
               </View>
             </View>
             <View style={{ alignItems: "center" }}>
-              <Text>Comment</Text>
+              <Text>Add Comment</Text>
               <TextInput
-                placeholder="Put your thougts"
+                multiline={true}
+                numberOfLines={7}
+                placeholder="Put your thoughts"
                 onChangeText={(text) => onChangeHandler("cmnt", text)}
                 value={cmnt}
                 name="cmnt"
@@ -236,8 +242,8 @@ const postPage = (disscussion) => {
             </View>
 
             <View style={{ marginVertical: 30, fontSize: 20 }}>
-              <TouchableOpacity onPress={onSubmit} style={{ left: 110 }}>
-                <Text>submit</Text>
+              <TouchableOpacity onPress={onSubmit} style={{ left: 150 }}>
+                <Text>Submit</Text>
               </TouchableOpacity>
             </View>
           </ModalPoup>
@@ -284,7 +290,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     backgroundColor: COLORS.white,
     width: "100%",
-   // marginHorizontal: 2,
+    // marginHorizontal: 2,
     borderRadius: 10,
     marginBottom: 20,
     padding: 1,
@@ -306,11 +312,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     marginTop: 10,
-    marginLeft:40,
+    marginLeft: 40,
   },
   userdetails: {
     marginLeft: 10,
-    
   },
   comment: {
     marginTop: 20,
