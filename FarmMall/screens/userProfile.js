@@ -12,9 +12,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import hostname from "../const/hostname";
 import COLORS from "../const/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
+
 const userProfile = ({ navigation }) => {
   const [user, setUser] = useState({});
   const [diss, setPost] = useState({});
+  const [followingCount, setFollowingCount] = useState();
+  const [followerCount, setFollowerCount] = useState();
   useEffect(async () => {
     const id = await AsyncStorage.getItem("id");
 
@@ -39,7 +42,17 @@ const userProfile = ({ navigation }) => {
     });
     const jsonRes1 = await res2.json();
     setPost(jsonRes1.getUsersPost);
+
+    setFollowerCount(jsonRes.user.follower.length);
+    setFollowingCount(jsonRes.user.following.length);
   }, []);
+
+  const seeFollowers = () => {
+    navigation.navigate("List", user.follower);
+  };
+  const seeFollowings = () => {
+    navigation.navigate("List", user.following);
+  };
 
   const Card = (diss) => {
     const onDelete = async () => {
@@ -75,12 +88,10 @@ const userProfile = ({ navigation }) => {
                 width: "100%",
                 borderRadius: 10,
               }}
-          />
-         
-           
+            />
           </View>
           <View style={style.cardInfo}>
-            <Text style={{ fontWeight: "bold", fontSize: 15 , }}>
+            <Text style={{ fontWeight: "bold", fontSize: 15 }}>
               {diss.diss[1].title}
             </Text>
             <View
@@ -95,11 +106,11 @@ const userProfile = ({ navigation }) => {
               </Text>
             </View>
             <Icon
-                name="delete"
-                onPress={onDelete}
-                size={20}
-                style={{ alignSelf: "center", color: "black"  , marginTop:5,}}
-              ></Icon>
+              name="delete"
+              onPress={onDelete}
+              size={20}
+              style={{ alignSelf: "center", color: "black", marginTop: 5 }}
+            ></Icon>
           </View>
         </View>
       </TouchableOpacity>
@@ -112,20 +123,35 @@ const userProfile = ({ navigation }) => {
     >
       <View style={style.userprofile}>
         <Image
-          style={style.userimg}
+          //    style={style.userimg}
           source={{ uri: user.avatar }}
           style={{
             width: 50,
             height: 50,
             borderRadius: 100,
             resizeMode: "contain",
-            marginLeft:60,
+            alignSelf: "center",
           }}
         />
 
         <View style={style.userdetails}>
-          <Text style={{ marginLeft:50, }}>{user.username}</Text>
-          <Text style={{ marginLeft:5,}}>{user.email}</Text>
+          <Text style={{ alignSelf: "center" }}>{user.username}</Text>
+          <Text style={{ alignSelf: "center" }}>{user.email}</Text>
+        </View>
+      </View>
+      <View style={style.followingDetails}>
+        <View style={{ right: 50 }}>
+          <TouchableOpacity activeOpacity={0.8} onPress={seeFollowings}>
+            <Text style={{ alignSelf: "center" }}>Following</Text>
+            <Text style={{ alignSelf: "center" }}>{followingCount}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ left: 50 }}>
+          <TouchableOpacity activeOpacity={0.8} onPress={seeFollowers}>
+            <Text style={{ alignSelf: "center" }}>Follower</Text>
+            <Text style={{ alignSelf: "center" }}>{followerCount}</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -166,24 +192,15 @@ const style = StyleSheet.create({
   cardInfo: {
     marginTop: 10,
   },
-  userimg: {
-    height: 10,
-    width: 10,
-    borderRadius: 50,
-    alignSelf:"center",
-  },
   userprofile: {
-    display: "flex",
     flexDirection: "column",
     marginVertical: 10,
     alignContent: "center",
     alignSelf: "center",
-   
   },
-  userdetails: {
-    display:"flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-   alignSelf:"center",
+  followingDetails: {
+    flexDirection: "row",
+    alignContent: "center",
+    alignSelf: "center",
   },
 });

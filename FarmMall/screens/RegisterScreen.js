@@ -52,16 +52,20 @@ const RegisterScreen = ({navigation})=>{
             })
             .then(async res=>{
               const jsonRes = await res.json();
-              if(res.status!=500)
-                await AsyncStorage.setItem('id', jsonRes["user"]._id)
+              console.log(jsonRes);
+              if(res.status!=500){
+                await AsyncStorage.setItem("id", jsonRes["user"]._id)
                 navigation.navigate("Home");
+              }
+              else{
+                setUser({...userData, err: jsonRes.msg, success:'' });
+              }
             })
             .catch((error) =>{
                 console.log(error);
             })
             
         } catch(error){
-            // err.response.data.msg && setUserData({...userData, err: err.response.data.msg, success: ''});
             console.log(error);
         }
     }
@@ -81,6 +85,7 @@ const RegisterScreen = ({navigation})=>{
 				<Logo/>
           <TextInput style={styles.inputBox} 
                         underlineColorAndroid='rgba(0,0,0,0)' 
+                        selectionColor="#7A797A"
                         placeholder="Username"
                         placeholderTextColor = "#7A797A" 
                         onChangeText={(text) => onChangeHandler('username', text)}
@@ -92,7 +97,7 @@ const RegisterScreen = ({navigation})=>{
                         underlineColorAndroid='rgba(0,0,0,0)' 
                         placeholder="Email"
                         placeholderTextColor = "#7A797A"
-                        selectionColor="#fff"
+                        selectionColor="#7A797A"
                         keyboardType="email-address"
                         onChangeText={(text) => onChangeHandler('email', text)}
                         value={email}
@@ -101,6 +106,7 @@ const RegisterScreen = ({navigation})=>{
                         name="password"
                         underlineColorAndroid='rgba(0,0,0,0)' 
                         placeholder="Password"
+                        selectionColor="#7A797A"
                         secureTextEntry={true}
                         placeholderTextColor = "#7A797A" 
                         onChangeText={(text) => onChangeHandler('password', text)}
@@ -110,11 +116,21 @@ const RegisterScreen = ({navigation})=>{
                         name="cpassword"
                         underlineColorAndroid='rgba(0,0,0,0)' 
                         placeholder="ConfirmPassword"
+                        selectionColor="#7A797A"
                         secureTextEntry={true}
                         placeholderTextColor = "#7A797A" 
                         onChangeText={(text) => onChangeHandler('cpassword', text)}
                         value={cpassword}
                     />
+                    {{err} && 
+        <View >
+          <Text style={{color: "white",
+  textAlign: "center",
+  marginBottom: 1,
+  fontSize:19,
+	fontWeight:"bold"}}>{err}</Text>
+        </View>
+        }
                     <TouchableOpacity style={styles.button} 
                       onPress={onSubmit}
                     >
@@ -165,7 +181,8 @@ const styles = StyleSheet.create({
   },
   button: {
     width:300,
-    backgroundColor:'#1c313a',
+    // backgroundColor:'#1c313a',
+    backgroundColor:'black',
      borderRadius: 25,
       marginVertical: 10,
       paddingVertical: 13,
@@ -176,6 +193,12 @@ const styles = StyleSheet.create({
     fontWeight:'800',
     color:'#ffffff',
     textAlign:'center'
-  }
+  },
+  err:{
+  color: "red",
+  textAlign: "center",
+  marginBottom: 1,
+  fontWeight: "bold"
+}
 });
 export default RegisterScreen

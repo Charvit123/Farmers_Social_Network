@@ -70,10 +70,10 @@ const HomeScreen = ({ navigation }) => {
     await takePost();
   }, []);
   const addQues = async () => {
-    navigation.navigate("AddQues");
+    navigation.push("AddQues");
   };
   const pressHandeler = async () => {
-    navigation.navigate("UserProfile");
+    navigation.push("UserProfile");
   };
   const onSubmit = async () => {
     try {
@@ -86,7 +86,7 @@ const HomeScreen = ({ navigation }) => {
       })
         .then(async (res) => {
           const jsonRes = await res.json();
-          navigation.navigate("Login");
+          navigation.push("Login");
         })
         .catch((error) => {
           console.log(error);

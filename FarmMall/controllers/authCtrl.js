@@ -9,21 +9,21 @@ const authCtrl = {
             let newUserName = username.toLowerCase().replace(/ /g, '');
 
             if(!username || !email || !password)
-                return res.status(400).json({ msg: "Please fill all fields!!" });
+                return res.status(500).json({ msg: "Please fill all fields!!" });
 
             const user_name = await Users.findOne({ username: newUserName });
             if (user_name)
-                return res.status(400).json({ msg: "This Username is already in Use." });
+                return res.status(500).json({ msg: "This Username is already in Use." });
 
             const user_email = await Users.findOne({ email });
             if (user_email)
-                return res.status(400).json({ msg: "This Email is already in Use." });
+                return res.status(500).json({ msg: "This Email is already in Use." });
 
             if(!validateEmail(email))
-                return res.status(400).json({ msg: "Invalid emails!!" });
+                return res.status(500).json({ msg: "Invalid emails!!" });
 
             if (password.length < 6)
-                return res.status(400).json({ msg: "Password must be at least 6 characters." });
+                return res.status(500).json({ msg: "Password must be at least 6 characters." });
 
             const passwordHash = await bcrypt.hash(password, 12);
 
@@ -133,8 +133,6 @@ const authCtrl = {
     },
     follow: async (req, res) => {
         const { id,currentUser } = req.body;
-        // const user = await Users.findOne(currentUser);
-
             await Users.updateOne(
             { _id: currentUser },
             { $push: { following: id } });

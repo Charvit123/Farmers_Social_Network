@@ -163,7 +163,7 @@ const otherUser = ({ route, navigation }) => {
       >
         <View style={style.userprofile}>
           <Image
-            style={style.userimg}
+          //  style={style.userimg}
             source={{ uri: user.avatar }}
             style={{
               width: 50,
