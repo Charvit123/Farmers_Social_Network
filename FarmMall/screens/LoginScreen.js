@@ -16,10 +16,23 @@ import loginimg from "../images/bg4.jpg";
 const state = {
   email: "",
   password: "",
+  err: '',
+  success:'',
 };
+// const showErrorMsg = (msg) => {
+//     return (
+      
+//     )
+// }
+
+// export const showSuccessMsg = (msg) => {
+//     return (
+//         <div className="successMsg">{msg}</div>
+//     )
+// }
 const LoginScreen = ({ navigation }) => {
   const [userData, setUser] = useState(state);
-  const { email, password } = userData;
+  const { email, password,err } = userData;
 
   const onChangeHandler = (name, value) => {
     setUser({ ...userData, [name]: value });
@@ -34,7 +47,9 @@ const LoginScreen = ({ navigation }) => {
       });
 
     if (!isEmail(email))
-      return setUser({ ...userData, err: "Invalid emails.", success: "" });
+      return setUser({ ...userData, err: "Invalid emails.", 
+      success: "" 
+    });
 
     if (isLength(password))
       return setUser({
@@ -53,17 +68,21 @@ const LoginScreen = ({ navigation }) => {
       })
         .then(async (res) => {
           const jsonRes = await res.json();
-          if (res.status != 500)
+          console.log(jsonRes);
+          if (res.status != 500){
             await AsyncStorage.setItem("id", jsonRes["user"]._id);
-          navigation.navigate("Home");
+            navigation.navigate("Home");
+          }
+          else{
+            setUser({...userData, err: jsonRes.msg, success:'' });
+          }
+
         })
         .catch((error) => {
           console.log(error);
         });
-      // setUserData({...userData, err: '', success: res.data.msg});
     } catch (err) {
       console.log(err);
-      // err.response.data.msg && setUserData({...userData, err: err.response.data.msg, success: ''});
     }
   };
   return (
@@ -84,7 +103,7 @@ const LoginScreen = ({ navigation }) => {
           underlineColorAndroid="rgba(0,0,0,0)"
           placeholder="Email"
           placeholderTextColor="#7A797A"
-          selectionColor="#fff"
+          selectionColor="#7A797A"
           keyboardType="email-address"
           onChangeText={(text) => onChangeHandler("email", text)}
           value={email}
@@ -92,12 +111,23 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           style={styles.inputBox}
           underlineColorAndroid="rgba(0,0,0,0)"
+          selectionColor="#7A797A"
           placeholder="Password"
           secureTextEntry={true}
           placeholderTextColor="#7A797A"
           onChangeText={(text) => onChangeHandler("password", text)}
           value={password}
         />
+        {{err} && 
+        <View >
+          <Text style={{color: "white",
+  textAlign: "center",
+  marginBottom: 1,
+  fontSize:19,
+	fontWeight:"bold"}}>{err}</Text>
+        </View>
+        }
+        {/* {success && showSuccessMsg(success)} */}
         <TouchableOpacity style={styles.button} onPress={onSubmit}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
@@ -146,7 +176,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 300,
-    backgroundColor: "#ffffff",
+    backgroundColor: "black",
     borderRadius: 25,
     marginVertical: 10,
     paddingVertical: 13,
@@ -155,8 +185,14 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "800",
-    color: "#7A797A",
+    color: "white",
     textAlign: "center",
   },
+  err:{
+  color: "red",
+  textAlign: "center",
+  marginBottom: 1,
+  fontWeight: "bold"
+}
 });
 export default LoginScreen;
