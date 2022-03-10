@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'user',
     },
+    following:{
+        type:Array,
+    },
+    follower:{
+        type:Array,
+    }
 }, {
     timestamps: true
 })
